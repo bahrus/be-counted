@@ -2,8 +2,36 @@
   "name": "be-counted",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "keywords": [
+    "web components",
+    "web component",
+    "custom elements",
+    "custom element",
+    "built-in"
+  ],
+  "main": "be-counted.js",
+  "module": "be-counted.js",
+  "exports": {
+    ".": "./be-committed.js",
+    "./be-committed.js": "./be-committed.js"
+  },
+  "files": [
+    "*.*"
+  ],
+  "types": "./types.d.ts",
+  "dependencies": {
+    "trans-render": "0.0.585",
+    "xtal-element": "0.0.517",
+    "be-decorated": "0.0.153",
+    "be-hive": "0.0.63"
+  },
+  "devDependencies": {
+    "may-it-serve": "0.0.2",
+    "@skypack/package-check": "0.2.2"
+  },
   "scripts": {
+    "serve": "node node_modules/may-it-serve/serve.js",
+    "package-check": "package-check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
