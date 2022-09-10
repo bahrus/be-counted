@@ -25,7 +25,7 @@ export class BeCounted extends EventTarget {
         }
     }
     async do(pp) {
-        const { proxy, step, value, ltOrEq, lt, transform, self } = pp;
+        const { proxy, step, transform, self } = pp;
         proxy.value += step;
         if (transform !== undefined) {
             if (this.#tx === undefined) {

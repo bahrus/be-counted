@@ -1,20 +1,20 @@
 import { getHost } from 'trans-render/lib/getHost.js';
 export class Tx {
-    model;
+    host;
     realmCitizen;
     #ctx;
     #realm;
-    constructor(model, realmCitizen, match) {
-        this.model = model;
+    constructor(host, realmCitizen, match) {
+        this.host = host;
         this.realmCitizen = realmCitizen;
         // const target = pram.transformFromClosest !== undefined ?
         //     proxy.closest(pram.transformFromClosest)
         //     : host.shadowRoot || host!;
-        const host = (getHost(realmCitizen, true) || document);
-        this.#realm = host.shadowRoot || host;
+        const rn = (getHost(realmCitizen, true) || document);
+        this.#realm = rn.shadowRoot || rn;
         this.#ctx = {
             match,
-            host: model,
+            host,
             initiator: realmCitizen
         };
     }
