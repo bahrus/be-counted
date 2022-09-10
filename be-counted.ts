@@ -56,12 +56,13 @@ define<VirtualProps & BeDecoratedProps<VirtualProps, Actions>, Actions>({
         propDefaults:{
             upgrade,
             ifWantsToBe,
-            virtualProps: ['incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 'nudge', 'step'],
+            virtualProps: ['incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 'nudge', 'step', 'value'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,
                 loop: false,
-                incOn: 'click'
+                incOn: 'click',
+                value: 0,
             },
             finale: 'finale'
         },
