@@ -9,7 +9,7 @@ Or in twitter-speak - it provides a primitive signal on an island of interactivi
 ```html
 <span></span>
 <button be-counted='{
-    "transformWhenInc": {
+    "transform": {
         "span": "value"
     }
 }'>Count</button>

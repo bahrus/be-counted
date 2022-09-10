@@ -7,7 +7,7 @@ export interface EndUserProps {
     min?: number;
     loop?: boolean;
     transformWhenMax?: any;
-    transformWhenInc?: any;
+    transform?: any;
     nudge?: boolean;
     incOn?: string;
     incOnSet?: string;

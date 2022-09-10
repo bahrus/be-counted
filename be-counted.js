@@ -25,12 +25,12 @@ export class BeCounted extends EventTarget {
         }
     }
     async do(pp) {
-        const { proxy, step, value, ltOrEq, lt, transformWhenInc, self } = pp;
+        const { proxy, step, value, ltOrEq, lt, transform, self } = pp;
         proxy.value += step;
-        if (transformWhenInc !== undefined) {
+        if (transform !== undefined) {
             if (this.#ctx === undefined) {
                 this.#ctx = {
-                    match: transformWhenInc,
+                    match: transform,
                     host: proxy,
                 };
             }
@@ -68,7 +68,7 @@ define({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
-                'nudge', 'step', 'value', 'transformWhenInc'
+                'nudge', 'step', 'value', 'transform'
             ],
             proxyPropDefaults: {
                 step: 1,
