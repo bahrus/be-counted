@@ -57,6 +57,7 @@ define({
                 incOn: 'click',
                 value: 0,
             },
+            emitEvents: ['value'],
             finale: 'finale'
         },
         actions: {

@@ -50,7 +50,7 @@ const tagName = 'be-counted';
 const ifWantsToBe = 'counted';
 const upgrade = '*';
 
-define<VirtualProps & BeDecoratedProps<VirtualProps, Actions>, Actions>({
+define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
     config:{
         tagName,
         propDefaults:{
@@ -64,6 +64,7 @@ define<VirtualProps & BeDecoratedProps<VirtualProps, Actions>, Actions>({
                 incOn: 'click',
                 value: 0,
             },
+            emitEvents: ['value'],
             finale: 'finale'
         },
         actions:{
