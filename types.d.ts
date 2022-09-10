@@ -15,6 +15,7 @@ export interface EndUserProps {
 
 export interface VirtualProps extends EndUserProps, MinimalProxy{
     value: number;
+
 }
 
 export type Proxy = Element & VirtualProps;

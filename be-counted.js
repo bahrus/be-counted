@@ -2,6 +2,7 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
     #abortController;
+    #ctx;
     onIncOn(pp) {
         const { self, incOn, proxy, min } = pp;
         proxy.resolved = true;
@@ -9,8 +10,8 @@ export class BeCounted extends EventTarget {
         if (!this.check(pp))
             return;
         proxy.value = min;
-        self.addEventListener(incOn, e => {
-            this.do(pp);
+        self.addEventListener(incOn, async (e) => {
+            await this.do(pp);
         }, { signal: this.#abortController?.signal });
     }
     check({ step, ltOrEq, lt, value }) {
@@ -23,10 +24,26 @@ export class BeCounted extends EventTarget {
             return step + value < lt;
         }
     }
-    do(pp) {
-        const { proxy, step, value, ltOrEq, lt } = pp;
+    async do(pp) {
+        const { proxy, step, value, ltOrEq, lt, transformWhenInc, self } = pp;
         proxy.value += step;
-        console.log({ value: proxy.value });
+        if (transformWhenInc !== undefined) {
+            if (this.#ctx === undefined) {
+                this.#ctx = {
+                    match: transformWhenInc,
+                    host: proxy,
+                };
+            }
+            // const target = pram.transformFromClosest !== undefined ?
+            //     proxy.closest(pram.transformFromClosest)
+            //     : host.shadowRoot || host!;
+            const { getHost } = await import('trans-render/lib/getHost.js');
+            const host = (getHost(proxy, true) || document);
+            const target = host.shadowRoot || host;
+            const { DTR } = await import('trans-render/lib/DTR.js');
+            await DTR.transform(target, this.#ctx);
+            this.#ctx.initiator = self;
+        }
         if (!this.check(pp)) {
             this.disconnect();
         }
@@ -49,7 +66,10 @@ define({
         propDefaults: {
             upgrade,
             ifWantsToBe,
-            virtualProps: ['incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 'nudge', 'step', 'value'],
+            virtualProps: [
+                'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
+                'nudge', 'step', 'value', 'transformWhenInc'
+            ],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,
