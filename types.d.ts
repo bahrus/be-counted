@@ -1,4 +1,5 @@
 import {BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
+import {MatchRHS} from 'trans-render/lib/types';
 
 export interface EndUserProps {
     step?: number;
@@ -7,7 +8,7 @@ export interface EndUserProps {
     min?: number;
     loop?: boolean;
     transformWhenMax?: any;
-    transform?: any;
+    transform?: {[key: string]: MatchRHS};
     nudge?: boolean;
     incOn?: string;
     incOnSet?: string;
@@ -29,4 +30,8 @@ export type PP = ProxyProps;
 export interface Actions{
     onIncOn(pp: PP): void;
     finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps): void;
+}
+
+export interface ITx{
+    transform(): Promise<void>
 }

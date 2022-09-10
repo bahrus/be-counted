@@ -1,12 +1,13 @@
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
-import {Actions, VirtualProps, Proxy, PP, ProxyProps} from './types';
+import {Actions, VirtualProps, Proxy, PP, ProxyProps, ITx} from './types';
 import {register} from 'be-hive/register.js';
-import { RenderContext } from './node_modules/trans-render/lib/types';
+
 
 export class BeCounted extends EventTarget implements Actions {
 
     #abortController: AbortController | undefined;
-    #ctx: RenderContext | undefined;
+    #tx: ITx | undefined;
+    
     onIncOn(pp: ProxyProps): void {
         const {self, incOn, proxy, min} = pp;
         proxy.resolved = true;
@@ -32,23 +33,11 @@ export class BeCounted extends EventTarget implements Actions {
         const {proxy, step, value, ltOrEq, lt, transform, self} = pp;
         proxy.value += step!;
         if(transform !== undefined){
-            if(this.#ctx === undefined){
-                
-                this.#ctx = {
-                    match: transform,
-                    host: proxy as any as HTMLElement,
-                };
+            if(this.#tx === undefined){
+                const {Tx} = await import('./Tx.js');
+                this.#tx = new Tx(proxy, self, transform);
             }
-            // const target = pram.transformFromClosest !== undefined ?
-            //     proxy.closest(pram.transformFromClosest)
-            //     : host.shadowRoot || host!;
-            const {getHost} = await import('trans-render/lib/getHost.js');
-            const host = (getHost(proxy, true) || document) as HTMLElement;
-            const target = host!.shadowRoot || host!;
-            const {DTR} = await import('trans-render/lib/DTR.js');
-            await DTR.transform(target, this.#ctx);
-
-            this.#ctx.initiator = self;
+            this.#tx.transform();
         }
         if(!this.check(pp)) {
             this.disconnect();
@@ -63,6 +52,7 @@ export class BeCounted extends EventTarget implements Actions {
 
     finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps<any, any>): void {
         this.disconnect();
+        this.#tx = undefined;
     }
 }
 

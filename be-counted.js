@@ -2,7 +2,7 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
     #abortController;
-    #ctx;
+    #tx;
     onIncOn(pp) {
         const { self, incOn, proxy, min } = pp;
         proxy.resolved = true;
@@ -28,21 +28,11 @@ export class BeCounted extends EventTarget {
         const { proxy, step, value, ltOrEq, lt, transform, self } = pp;
         proxy.value += step;
         if (transform !== undefined) {
-            if (this.#ctx === undefined) {
-                this.#ctx = {
-                    match: transform,
-                    host: proxy,
-                };
+            if (this.#tx === undefined) {
+                const { Tx } = await import('./Tx.js');
+                this.#tx = new Tx(proxy, self, transform);
             }
-            // const target = pram.transformFromClosest !== undefined ?
-            //     proxy.closest(pram.transformFromClosest)
-            //     : host.shadowRoot || host!;
-            const { getHost } = await import('trans-render/lib/getHost.js');
-            const host = (getHost(proxy, true) || document);
-            const target = host.shadowRoot || host;
-            const { DTR } = await import('trans-render/lib/DTR.js');
-            await DTR.transform(target, this.#ctx);
-            this.#ctx.initiator = self;
+            this.#tx.transform();
         }
         if (!this.check(pp)) {
             this.disconnect();
@@ -55,6 +45,7 @@ export class BeCounted extends EventTarget {
     }
     finale(proxy, self, beDecor) {
         this.disconnect();
+        this.#tx = undefined;
     }
 }
 const tagName = 'be-counted';
