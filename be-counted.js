@@ -29,7 +29,7 @@ export class BeCounted extends EventTarget {
         proxy.value += step;
         if (transform !== undefined) {
             if (this.#tx === undefined) {
-                const { Tx } = await import('./Tx.js');
+                const { Tx } = await import('trans-render/lib/Tx.js');
                 this.#tx = new Tx(proxy, self, transform);
             }
             this.#tx.transform();

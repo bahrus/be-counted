@@ -32,6 +32,3 @@ export interface Actions{
     finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps): void;
 }
 
-export interface ITx{
-    transform(): Promise<void>
-}

@@ -1,6 +1,7 @@
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
-import {Actions, VirtualProps, Proxy, PP, ProxyProps, ITx} from './types';
+import {Actions, VirtualProps, Proxy, PP, ProxyProps,} from './types';
 import {register} from 'be-hive/register.js';
+import {ITx} from 'trans-render/lib/types';
 
 
 export class BeCounted extends EventTarget implements Actions {
@@ -34,7 +35,7 @@ export class BeCounted extends EventTarget implements Actions {
         proxy.value += step!;
         if(transform !== undefined){
             if(this.#tx === undefined){
-                const {Tx} = await import('./Tx.js');
+                const {Tx} = await import('trans-render/lib/Tx.js');
                 this.#tx = new Tx(proxy, self, transform);
             }
             this.#tx.transform();
