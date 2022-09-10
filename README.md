@@ -4,6 +4,12 @@
 
 Or in twitter-speak - it provides a primitive signal on an island of interactivity, which reactively renders to the UI the number of times the button was clicked.
 
+<a href="https://nodei.co/npm/be-counted/"><img src="https://nodei.co/npm/be-counted.png"></a>
+
+[![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/be-counted?style=for-the-badge)](https://bundlephobia.com/result?p=be-counted)
+
+<img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
+
 ## Sample syntax:
 
 ```html
