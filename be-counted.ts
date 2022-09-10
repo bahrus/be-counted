@@ -6,15 +6,33 @@ export class BeCounted extends EventTarget implements Actions {
 
     #abortController: AbortController | undefined;
     onIncOn(pp: ProxyProps): void {
+        const {self, incOn, proxy, min} = pp;
+        proxy.resolved = true;
         this.disconnect();
-        const {self, incOn} = pp;
+        if(!this.check(pp)) return;
+        proxy.value = min!;
         self.addEventListener(incOn!, e => {
             this.do(pp);
         }, {signal: this.#abortController?.signal});
     }
 
-    do(pp: PP){
+    check({step, ltOrEq, lt, value}: PP){
+        if(step! > 0){
+            if(ltOrEq === undefined && lt === undefined) return true;
+            if(ltOrEq !== undefined){
+                return step! + value <= ltOrEq;
+            }
+            return step! + value < lt!;
+        }
+    }
 
+    do(pp: PP){
+        const {proxy, step, value, ltOrEq, lt} = pp;
+        proxy.value += step!;
+        console.log({value: proxy.value});
+        if(!this.check(pp)) {
+            this.disconnect();
+        }
     }
 
     disconnect(){
@@ -38,6 +56,7 @@ define<VirtualProps & BeDecoratedProps<VirtualProps, Actions>, Actions>({
         propDefaults:{
             upgrade,
             ifWantsToBe,
+            virtualProps: ['incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 'nudge', 'step'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,
@@ -46,6 +65,12 @@ define<VirtualProps & BeDecoratedProps<VirtualProps, Actions>, Actions>({
             },
             finale: 'finale'
         },
+        actions:{
+            onIncOn: {
+                ifAllOf: ['incOn'],
+                ifKeyIn: ['lt', 'ltOrEq']
+            }
+        }
     },
     complexPropDefaults:{
         controller: BeCounted
