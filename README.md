@@ -25,3 +25,11 @@ Size of new code in this package:
 }'>Count</button>
 ```
 
+Using from CDN:
+
+```html
+<script type=module crossorigin=anonymous>
+    import 'https://esm.run/be-counted';
+</script>
+```
+
