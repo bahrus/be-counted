@@ -14,6 +14,7 @@ Size of new code in this package:
 
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
 
+
 ## Sample syntax:
 
 ```html
@@ -24,6 +25,28 @@ Size of new code in this package:
     }
 }'>Count</button>
 ```
+
+The scope of the transform is configured  via the transformScope setting:
+
+```TypeScript
+/**
+ * Outer boundary that transform should act on.
+ */
+transformScope?: {
+    /**
+     * use native function getRootNode() to set the boundary
+     *
+     */ 
+    rootNode?: boolean;
+    /**
+     * Use the parent element as the boundary
+     */
+    parent?: boolean;
+    /**
+     * Use the native "closest" function to set the boundary
+     */
+    closest?: string;
+}
 
 ## Using from CDN:
 
