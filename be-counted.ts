@@ -31,12 +31,13 @@ export class BeCounted extends EventTarget implements Actions {
     }
 
     async do(pp: PP){
-        const {proxy, step, transform, self} = pp;
+        const {proxy, step, transform} = pp;
         proxy.value += step!;
         if(transform !== undefined){
+            const {self, transformScope} = pp;
             if(this.#tx === undefined){
                 const {Tx} = await import('trans-render/lib/Tx.js');
-                this.#tx = new Tx(proxy, self, transform);
+                this.#tx = new Tx(proxy, self, transform, transformScope!);
             }
             this.#tx.transform();
         }
@@ -69,7 +70,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
-                'nudge', 'step', 'value', 'transform'
+                'nudge', 'step', 'value', 'transform', 'transformScope'
             ],
             proxyPropDefaults: {
                 step: 1,
@@ -77,6 +78,9 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 loop: false,
                 incOn: 'click',
                 value: 0,
+                transformScope:{
+                    parent: true,
+                }
             },
             emitEvents: ['value'],
             finale: 'finale'
