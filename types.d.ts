@@ -1,5 +1,5 @@
 import {BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
-import {MatchRHS, TransformScope} from 'trans-render/lib/types';
+import {MatchRHS, Scope} from 'trans-render/lib/types';
 
 export interface EndUserProps {
     step?: number;
@@ -9,7 +9,7 @@ export interface EndUserProps {
     loop?: boolean;
     transformWhenMax?: any;
     transform?: {[key: string]: MatchRHS};
-    transformScope?: TransformScope;
+    transformScope?: Scope;
     nudge?: boolean;
     incOn?: string;
     incOnSet?: string;

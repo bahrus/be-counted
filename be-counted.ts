@@ -78,9 +78,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 loop: false,
                 incOn: 'click',
                 value: 0,
-                transformScope:{
-                    parent: true,
-                }
+                transformScope: 'parent'
             },
             emitEvents: ['value'],
             finale: 'finale'

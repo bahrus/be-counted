@@ -68,9 +68,7 @@ define({
                 loop: false,
                 incOn: 'click',
                 value: 0,
-                transformScope: {
-                    parent: true,
-                }
+                transformScope: 'parent'
             },
             emitEvents: ['value'],
             finale: 'finale'
