@@ -4,6 +4,8 @@
 
 Or in twitter-speak - it provides a primitive signal on an island of interactivity, which reactively renders to the UI the number of times the button was clicked.
 
+[![Playwright Tests](https://github.com/bahrus/be-counted/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/be-counted/actions/workflows/CI.yml)
+
 <a href="https://nodei.co/npm/be-counted/"><img src="https://nodei.co/npm/be-counted.png"></a>
 
 Size of package, including custom element behavior framework (be-decorated):
