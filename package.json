@@ -20,8 +20,8 @@
   ],
   "types": "./types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.623",
-    "be-decorated": "0.0.169",
+    "trans-render": "0.0.625",
+    "be-decorated": "0.0.171",
     "be-hive": "0.0.73"
   },
   "devDependencies": {
