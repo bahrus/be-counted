@@ -1,5 +1,6 @@
 import {define, BeDecoratedProps} from 'be-decorated/DE.js';
-import {Actions, VirtualProps, Proxy, PP, ProxyProps,} from './types';
+import {EventConfigs} from 'be-decorated/types';
+import {Actions, VirtualProps, Proxy, PP, ProxyProps} from './types';
 import {register} from 'be-hive/register.js';
 import {ITx} from 'trans-render/lib/types';
 
@@ -9,15 +10,19 @@ export class BeCounted extends EventTarget implements Actions {
     #abortController: AbortController | undefined;
     #tx: ITx | undefined;
     
-    onIncOn(pp: ProxyProps): void {
+    onIncOn(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] | void {
         const {self, incOn, proxy, min} = pp;
-        proxy.resolved = true;
-        this.disconnect();
-        if(!this.check(pp)) return;
-        proxy.value = min!;
-        self.addEventListener(incOn!, async e => {
-            await this.do(pp);
-        }, {signal: this.#abortController?.signal});
+        if(!this.check(pp)) return [{}, {}];  //clears event handler
+        return [{
+            value: min,
+            resolved: true,
+        },{
+            [incOn!]: {
+                observe: self,
+                action: 'do',
+                doInit: false,
+            }
+        }];
     }
 
     check({step, ltOrEq, lt, value}: PP){
@@ -42,20 +47,12 @@ export class BeCounted extends EventTarget implements Actions {
             this.#tx.transform();
         }
         if(!this.check(pp)) {
-            this.disconnect();
+            return{
+                incOff: true
+            }
         }
     }
 
-    disconnect(){
-        if(this.#abortController !== undefined){
-            this.#abortController.abort();
-        }
-    }
-
-    finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps<any, any>): void {
-        this.disconnect();
-        this.#tx = undefined;
-    }
 }
 
 const tagName = 'be-counted';
@@ -70,7 +67,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
-                'nudge', 'step', 'value', 'transform', 'transformScope'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
             ],
             proxyPropDefaults: {
                 step: 1,
@@ -81,12 +78,12 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 transformScope: 'parent'
             },
             emitEvents: ['value'],
-            finale: 'finale'
+            //finale: 'finale'
         },
         actions:{
             onIncOn: {
                 ifAllOf: ['incOn'],
-                ifKeyIn: ['lt', 'ltOrEq']
+                ifKeyIn: ['lt', 'ltOrEq', 'incOff']
             }
         }
     },

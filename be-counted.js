@@ -5,14 +5,18 @@ export class BeCounted extends EventTarget {
     #tx;
     onIncOn(pp) {
         const { self, incOn, proxy, min } = pp;
-        proxy.resolved = true;
-        this.disconnect();
         if (!this.check(pp))
-            return;
-        proxy.value = min;
-        self.addEventListener(incOn, async (e) => {
-            await this.do(pp);
-        }, { signal: this.#abortController?.signal });
+            return [{}, {}]; //clears event handler
+        return [{
+                value: min,
+                resolved: true,
+            }, {
+                [incOn]: {
+                    observe: self,
+                    action: 'do',
+                    doInit: false,
+                }
+            }];
     }
     check({ step, ltOrEq, lt, value }) {
         if (step > 0) {
@@ -36,17 +40,10 @@ export class BeCounted extends EventTarget {
             this.#tx.transform();
         }
         if (!this.check(pp)) {
-            this.disconnect();
+            return {
+                incOff: true
+            };
         }
-    }
-    disconnect() {
-        if (this.#abortController !== undefined) {
-            this.#abortController.abort();
-        }
-    }
-    finale(proxy, self, beDecor) {
-        this.disconnect();
-        this.#tx = undefined;
     }
 }
 const tagName = 'be-counted';
@@ -60,7 +57,7 @@ define({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
-                'nudge', 'step', 'value', 'transform', 'transformScope'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
             ],
             proxyPropDefaults: {
                 step: 1,
@@ -71,12 +68,12 @@ define({
                 transformScope: 'parent'
             },
             emitEvents: ['value'],
-            finale: 'finale'
+            //finale: 'finale'
         },
         actions: {
             onIncOn: {
                 ifAllOf: ['incOn'],
-                ifKeyIn: ['lt', 'ltOrEq']
+                ifKeyIn: ['lt', 'ltOrEq', 'incOff']
             }
         }
     },

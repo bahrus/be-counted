@@ -13,6 +13,7 @@ export interface EndUserProps {
     nudge?: boolean;
     incOn?: string;
     incOnSet?: string;
+    incOff?: boolean;
 }
 
 export interface VirtualProps extends EndUserProps, MinimalProxy{
@@ -30,6 +31,7 @@ export type PP = ProxyProps;
 
 export interface Actions{
     onIncOn(pp: PP): void;
-    finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps): void;
+    do(pp: PP): void;
+    //finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps): void;
 }
 
