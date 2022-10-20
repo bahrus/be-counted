@@ -16,9 +16,9 @@ export class BeCounted extends EventTarget implements Actions {
             value: min,
             resolved: true,
         },{
-            [incOn!]: {
-                observe: self,
-                action: 'inc',
+            inc: {
+                on: incOn!,
+                of: self,
                 doInit: false,
             }
         }];
