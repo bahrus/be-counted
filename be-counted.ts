@@ -10,7 +10,7 @@ export class BeCounted extends EventTarget implements Actions {
     #abortController: AbortController | undefined;
     #tx: ITx | undefined;
     
-    onIncOn(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] | void {
+    doIncOn(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] | void {
         const {self, incOn, proxy, min} = pp;
         if(!this.check(pp)) return [{}, {}];  //clears event handler
         return [{
@@ -19,7 +19,7 @@ export class BeCounted extends EventTarget implements Actions {
         },{
             [incOn!]: {
                 observe: self,
-                action: 'do',
+                action: 'inc',
                 doInit: false,
             }
         }];
@@ -35,22 +35,24 @@ export class BeCounted extends EventTarget implements Actions {
         }
     }
 
-    async do(pp: PP){
+    async inc(pp: PP){
         const {proxy, step, transform} = pp;
         proxy.value += step!;
-        if(transform !== undefined){
-            const {self, transformScope} = pp;
-            if(this.#tx === undefined){
-                const {Tx} = await import('trans-render/lib/Tx.js');
-                this.#tx = new Tx(proxy, self, transform, transformScope!);
-            }
-            this.#tx.transform();
-        }
         if(!this.check(pp)) {
             return{
                 incOff: true
             }
         }
+    }
+
+    async tx(pp: PP){
+        const {self, transformScope, proxy} = pp;
+        if(this.#tx === undefined){
+            const {transform} = pp;
+            const {Tx} = await import('trans-render/lib/Tx.js');
+            this.#tx = new Tx(proxy, self, transform!, transformScope!);
+        }
+        this.#tx.transform();
     }
 
 }
@@ -81,9 +83,13 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             //finale: 'finale'
         },
         actions:{
-            onIncOn: {
+            doIncOn: {
                 ifAllOf: ['incOn'],
                 ifKeyIn: ['lt', 'ltOrEq', 'incOff']
+            },
+            tx:{
+                ifAllOf: ['transform'],
+                ifKeyIn: ['value']
             }
         }
     },

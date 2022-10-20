@@ -30,8 +30,9 @@ export interface ProxyProps extends VirtualProps{
 export type PP = ProxyProps;
 
 export interface Actions{
-    onIncOn(pp: PP): void;
-    do(pp: PP): void;
+    doIncOn(pp: PP): void;
+    inc(pp: PP): void;
+    tx(pp: PP): void;
     //finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps): void;
 }
 

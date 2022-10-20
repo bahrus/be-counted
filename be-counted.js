@@ -3,7 +3,7 @@ import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
     #abortController;
     #tx;
-    onIncOn(pp) {
+    doIncOn(pp) {
         const { self, incOn, proxy, min } = pp;
         if (!this.check(pp))
             return [{}, {}]; //clears event handler
@@ -13,7 +13,7 @@ export class BeCounted extends EventTarget {
             }, {
                 [incOn]: {
                     observe: self,
-                    action: 'do',
+                    action: 'inc',
                     doInit: false,
                 }
             }];
@@ -28,22 +28,23 @@ export class BeCounted extends EventTarget {
             return step + value < lt;
         }
     }
-    async do(pp) {
+    async inc(pp) {
         const { proxy, step, transform } = pp;
         proxy.value += step;
-        if (transform !== undefined) {
-            const { self, transformScope } = pp;
-            if (this.#tx === undefined) {
-                const { Tx } = await import('trans-render/lib/Tx.js');
-                this.#tx = new Tx(proxy, self, transform, transformScope);
-            }
-            this.#tx.transform();
-        }
         if (!this.check(pp)) {
             return {
                 incOff: true
             };
         }
+    }
+    async tx(pp) {
+        const { self, transformScope, proxy } = pp;
+        if (this.#tx === undefined) {
+            const { transform } = pp;
+            const { Tx } = await import('trans-render/lib/Tx.js');
+            this.#tx = new Tx(proxy, self, transform, transformScope);
+        }
+        this.#tx.transform();
     }
 }
 const tagName = 'be-counted';
@@ -71,9 +72,13 @@ define({
             //finale: 'finale'
         },
         actions: {
-            onIncOn: {
+            doIncOn: {
                 ifAllOf: ['incOn'],
                 ifKeyIn: ['lt', 'ltOrEq', 'incOff']
+            },
+            tx: {
+                ifAllOf: ['transform'],
+                ifKeyIn: ['value']
             }
         }
     },
