@@ -9,8 +9,8 @@ export class BeCounted extends EventTarget implements Actions {
 
     #tx: ITx | undefined;
     
-    hydrate(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] | void {
-        const {self, incOn, proxy, min} = pp;
+    hydrate(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] {
+        const {self, incOn, min} = pp;
         if(!this.check(pp)) return [{}, {}];  //clears event handler
         return [{
             value: min,
@@ -35,8 +35,7 @@ export class BeCounted extends EventTarget implements Actions {
     }
 
     inc(pp: PP){
-        const {proxy, step} = pp;
-        let {value} = proxy;
+        let {value, step} = pp;
         value += step!;
         if(!this.check(pp)) {
             return {
@@ -51,13 +50,17 @@ export class BeCounted extends EventTarget implements Actions {
     }
 
     async tx(pp: PP){
-        const {self, transformScope, proxy} = pp;
         if(this.#tx === undefined){
+            const {self, transformScope, proxy} = pp;
             const {transform} = pp;
             const {Tx} = await import('trans-render/lib/Tx.js');
             this.#tx = new Tx(proxy, self, transform!, transformScope!);
         }
         this.#tx.transform();
+    }
+
+    finale(): void {
+        this.#tx = undefined;
     }
 
 }
@@ -76,7 +79,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
                 'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
             ],
-            nonDryProps: ['incOff'],
+            nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,

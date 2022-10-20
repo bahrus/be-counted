@@ -3,7 +3,7 @@ import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
     #tx;
     hydrate(pp) {
-        const { self, incOn, proxy, min } = pp;
+        const { self, incOn, min } = pp;
         if (!this.check(pp))
             return [{}, {}]; //clears event handler
         return [{
@@ -28,8 +28,7 @@ export class BeCounted extends EventTarget {
         }
     }
     inc(pp) {
-        const { proxy, step } = pp;
-        let { value } = proxy;
+        let { value, step } = pp;
         value += step;
         if (!this.check(pp)) {
             return {
@@ -44,13 +43,16 @@ export class BeCounted extends EventTarget {
         }
     }
     async tx(pp) {
-        const { self, transformScope, proxy } = pp;
         if (this.#tx === undefined) {
+            const { self, transformScope, proxy } = pp;
             const { transform } = pp;
             const { Tx } = await import('trans-render/lib/Tx.js');
             this.#tx = new Tx(proxy, self, transform, transformScope);
         }
         this.#tx.transform();
+    }
+    finale() {
+        this.#tx = undefined;
     }
 }
 const tagName = 'be-counted';
@@ -66,7 +68,7 @@ define({
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
                 'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
             ],
-            nonDryProps: ['incOff'],
+            nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,

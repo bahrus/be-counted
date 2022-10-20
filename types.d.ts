@@ -1,4 +1,4 @@
-import {BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
+import {BeDecoratedProps, MinimalProxy, EventConfigs} from 'be-decorated/types';
 import {MatchRHS, Scope} from 'trans-render/lib/types';
 
 export interface EndUserProps {
@@ -29,10 +29,12 @@ export interface ProxyProps extends VirtualProps{
 
 export type PP = ProxyProps;
 
+export type PA = Partial<PP>;
+
 export interface Actions{
-    hydrate(pp: PP): void;
-    inc(pp: PP): void;
+    hydrate(pp: PP): [PA, EventConfigs<Proxy, Actions>];
+    inc(pp: PP): PA;
     tx(pp: PP): void;
-    //finale(proxy: Proxy, self: Element, beDecor: BeDecoratedProps): void;
+    finale(): void;
 }
 
