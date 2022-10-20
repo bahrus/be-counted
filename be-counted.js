@@ -30,10 +30,17 @@ export class BeCounted extends EventTarget {
     }
     async inc(pp) {
         const { proxy, step, transform } = pp;
-        proxy.value += step;
+        let { value } = proxy;
+        value += step;
         if (!this.check(pp)) {
             return {
-                incOff: true
+                incOff: true,
+                value
+            };
+        }
+        else {
+            return {
+                value
             };
         }
     }
