@@ -1,9 +1,8 @@
 import { define } from 'be-decorated/DE.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
-    #abortController;
     #tx;
-    doIncOn(pp) {
+    hydrate(pp) {
         const { self, incOn, proxy, min } = pp;
         if (!this.check(pp))
             return [{}, {}]; //clears event handler
@@ -28,8 +27,8 @@ export class BeCounted extends EventTarget {
             return step + value < lt;
         }
     }
-    async inc(pp) {
-        const { proxy, step, transform } = pp;
+    inc(pp) {
+        const { proxy, step } = pp;
         let { value } = proxy;
         value += step;
         if (!this.check(pp)) {
@@ -67,6 +66,7 @@ define({
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
                 'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
             ],
+            nonDryProps: ['incOff'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,
@@ -79,7 +79,7 @@ define({
             //finale: 'finale'
         },
         actions: {
-            doIncOn: {
+            hydrate: {
                 ifAllOf: ['incOn'],
                 ifKeyIn: ['lt', 'ltOrEq', 'incOff']
             },

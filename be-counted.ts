@@ -7,10 +7,9 @@ import {ITx} from 'trans-render/lib/types';
 
 export class BeCounted extends EventTarget implements Actions {
 
-    #abortController: AbortController | undefined;
     #tx: ITx | undefined;
     
-    doIncOn(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] | void {
+    hydrate(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] | void {
         const {self, incOn, proxy, min} = pp;
         if(!this.check(pp)) return [{}, {}];  //clears event handler
         return [{
@@ -35,8 +34,8 @@ export class BeCounted extends EventTarget implements Actions {
         }
     }
 
-    async inc(pp: PP){
-        const {proxy, step, transform} = pp;
+    inc(pp: PP){
+        const {proxy, step} = pp;
         let {value} = proxy;
         value += step!;
         if(!this.check(pp)) {
@@ -77,6 +76,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
                 'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
             ],
+            nonDryProps: ['incOff'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,
@@ -89,7 +89,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             //finale: 'finale'
         },
         actions:{
-            doIncOn: {
+            hydrate: {
                 ifAllOf: ['incOn'],
                 ifKeyIn: ['lt', 'ltOrEq', 'incOff']
             },
