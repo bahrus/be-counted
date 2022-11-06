@@ -30,6 +30,21 @@ Size of new code in this package:
 
 The scope of the transform is configured  via the transformScope setting.
 
+One import use case be-counted can be used for -- disabling a button once it's been clicked:
+
+```html
+<span></span>
+<button be-counted='{
+    "lt": 2,
+    "transform": {
+        "span": "value"
+    },
+    "transformWhenMax": {
+        ":initiator": {"disabled": true}
+    }
+}'>Count</button>
+```
+
 
 ## Using from CDN:
 

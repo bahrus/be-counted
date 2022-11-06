@@ -7,7 +7,7 @@ import {ITx} from 'trans-render/lib/types';
 
 export class BeCounted extends EventTarget implements Actions {
 
-    #tx: ITx | undefined;
+    
     
     hydrate(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] {
         const {self, incOn, min, incOff} = pp;
@@ -55,14 +55,24 @@ export class BeCounted extends EventTarget implements Actions {
         
     }
 
+    #tx: ITx | undefined;
     async tx(pp: PP){
         if(this.#tx === undefined){
-            const {self, transformScope, proxy} = pp;
-            const {transform} = pp;
+            const {self, transformScope, proxy, transform} = pp;
             const {Tx} = await import('trans-render/lib/Tx.js');
             this.#tx = new Tx(proxy, self, transform!, transformScope!);
         }
         this.#tx.transform();
+    }
+
+    #txWhenMax: ITx | undefined;
+    async txWhenMax(pp: PP){
+        if(this.#txWhenMax === undefined){
+            const {self, transformScope, proxy, transformWhenMax} = pp;
+            const {Tx} = await import('trans-render/lib/Tx.js');
+            this.#txWhenMax = new Tx(proxy, self, transformWhenMax!, transformScope!);
+        }
+        this.#txWhenMax.transform();
     }
 
     finale(): void {
@@ -83,7 +93,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked', 'transformWhenMax'
             ],
             nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
@@ -109,6 +119,9 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             tx:{
                 ifAllOf: ['transform'],
                 ifKeyIn: ['value']
+            },
+            txWhenMax:{
+                ifAllOf: ['transformWhenMax', 'incOff']
             }
         }
     },

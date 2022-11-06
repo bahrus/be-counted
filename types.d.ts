@@ -37,7 +37,8 @@ export interface Actions{
     hydrate(pp: PP): PPE;
     inc(pp: PP): PA;
     check(pp: PP): PA
-    tx(pp: PP): void;
+    tx(pp: PP): Promise<void>;
     finale(): void;
+    txWhenMax(pp: PP): Promise<void>;
 }
 

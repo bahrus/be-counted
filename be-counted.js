@@ -1,7 +1,6 @@
 import { define } from 'be-decorated/DE.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
-    #tx;
     hydrate(pp) {
         const { self, incOn, min, incOff } = pp;
         if (incOff)
@@ -46,14 +45,23 @@ export class BeCounted extends EventTarget {
             value: value + step,
         };
     }
+    #tx;
     async tx(pp) {
         if (this.#tx === undefined) {
-            const { self, transformScope, proxy } = pp;
-            const { transform } = pp;
+            const { self, transformScope, proxy, transform } = pp;
             const { Tx } = await import('trans-render/lib/Tx.js');
             this.#tx = new Tx(proxy, self, transform, transformScope);
         }
         this.#tx.transform();
+    }
+    #txWhenMax;
+    async txWhenMax(pp) {
+        if (this.#txWhenMax === undefined) {
+            const { self, transformScope, proxy, transformWhenMax } = pp;
+            const { Tx } = await import('trans-render/lib/Tx.js');
+            this.#txWhenMax = new Tx(proxy, self, transformWhenMax, transformScope);
+        }
+        this.#txWhenMax.transform();
     }
     finale() {
         this.#tx = undefined;
@@ -70,7 +78,7 @@ define({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked', 'transformWhenMax'
             ],
             nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
@@ -96,6 +104,9 @@ define({
             tx: {
                 ifAllOf: ['transform'],
                 ifKeyIn: ['value']
+            },
+            txWhenMax: {
+                ifAllOf: ['transformWhenMax', 'incOff']
             }
         }
     },
