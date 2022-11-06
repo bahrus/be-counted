@@ -3,8 +3,8 @@ import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
     #tx;
     hydrate(pp) {
-        const { self, incOn, min } = pp;
-        if (!this.check(pp))
+        const { self, incOn, min, incOff } = pp;
+        if (incOff)
             return [{}, {}]; //clears event handler
         return [{
                 value: min,
@@ -20,27 +20,31 @@ export class BeCounted extends EventTarget {
     check({ step, ltOrEq, lt, value }) {
         if (step > 0) {
             if (ltOrEq === undefined && lt === undefined)
-                return true;
+                return {
+                    incOff: false,
+                    checked: true,
+                };
             if (ltOrEq !== undefined) {
-                return step + value <= ltOrEq;
+                return {
+                    incOff: step + value > ltOrEq,
+                    checked: true,
+                };
             }
-            return step + value < lt;
+            return {
+                incOff: step + value >= lt,
+                checked: true,
+            };
         }
+        return {
+            incOff: false,
+            checked: true,
+        };
     }
     inc(pp) {
         let { value, step } = pp;
-        value += step;
-        if (!this.check(pp)) {
-            return {
-                incOff: true,
-                value
-            };
-        }
-        else {
-            return {
-                value
-            };
-        }
+        return {
+            value: value + step,
+        };
     }
     async tx(pp) {
         if (this.#tx === undefined) {
@@ -66,7 +70,7 @@ define({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked'
             ],
             nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
@@ -74,6 +78,7 @@ define({
                 min: 0,
                 loop: false,
                 incOn: 'click',
+                checked: false,
                 value: 0,
                 transformScope: 'parent'
             },
@@ -81,8 +86,11 @@ define({
             //finale: 'finale'
         },
         actions: {
+            check: {
+                ifKeyIn: ['value']
+            },
             hydrate: {
-                ifAllOf: ['incOn'],
+                ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq', 'incOff']
             },
             tx: {

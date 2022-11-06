@@ -10,8 +10,8 @@ export class BeCounted extends EventTarget implements Actions {
     #tx: ITx | undefined;
     
     hydrate(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] {
-        const {self, incOn, min} = pp;
-        if(!this.check(pp)) return [{}, {}];  //clears event handler
+        const {self, incOn, min, incOff} = pp;
+        if(incOff) return [{}, {}];  //clears event handler
         return [{
             value: min,
             resolved: true,
@@ -26,27 +26,33 @@ export class BeCounted extends EventTarget implements Actions {
 
     check({step, ltOrEq, lt, value}: PP){
         if(step! > 0){
-            if(ltOrEq === undefined && lt === undefined) return true;
+            if(ltOrEq === undefined && lt === undefined) return {
+                incOff: false,
+                checked: true,
+            };
             if(ltOrEq !== undefined){
-                return step! + value <= ltOrEq;
+                return {
+                    incOff: step! + value > ltOrEq,
+                    checked: true,
+                } 
             }
-            return step! + value < lt!;
+            return {
+                incOff: step! + value >= lt!,
+                checked: true,
+            }
+        }
+        return {
+            incOff: false,
+            checked: true,
         }
     }
 
     inc(pp: PP){
         let {value, step} = pp;
-        value += step!;
-        if(!this.check(pp)) {
-            return {
-                incOff: true,
-                value
-            }
-        }else {
-            return {
-                value
-            }
+        return {
+            value: value + step!,
         }
+        
     }
 
     async tx(pp: PP){
@@ -77,7 +83,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked'
             ],
             nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
@@ -85,6 +91,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 min: 0,
                 loop: false,
                 incOn: 'click',
+                checked: false,
                 value: 0,
                 transformScope: 'parent'
             },
@@ -92,8 +99,11 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             //finale: 'finale'
         },
         actions:{
+            check: {
+                ifKeyIn: ['value']
+            },
             hydrate: {
-                ifAllOf: ['incOn'],
+                ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq', 'incOff']
             },
             tx:{

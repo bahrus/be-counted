@@ -18,7 +18,7 @@ export interface EndUserProps {
 
 export interface VirtualProps extends EndUserProps, MinimalProxy{
     value: number;
-
+    checked: boolean;
 }
 
 export type Proxy = Element & VirtualProps;
@@ -31,9 +31,12 @@ export type PP = ProxyProps;
 
 export type PA = Partial<PP>;
 
+export type PPE = [PA, EventConfigs<Proxy, Actions>];
+
 export interface Actions{
-    hydrate(pp: PP): [PA, EventConfigs<Proxy, Actions>];
+    hydrate(pp: PP): PPE;
     inc(pp: PP): PA;
+    check(pp: PP): PA
     tx(pp: PP): void;
     finale(): void;
 }
