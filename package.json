@@ -12,20 +12,20 @@
   "main": "be-counted.js",
   "module": "be-counted.js",
   "exports": {
-    ".": "./be-committed.js",
-    "./be-committed.js": "./be-committed.js"
+    ".": "./be-counted.js",
+    "./be-counted.js": "./be-counted.js"
   },
   "files": [
     "*.*"
   ],
   "types": "./types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.637",
+    "trans-render": "0.0.641",
     "be-decorated": "0.0.191",
     "be-hive": "0.0.77"
   },
   "devDependencies": {
-    "may-it-serve": "0.0.3",
+    "may-it-serve": "0.0.4",
     "@playwright/test": "1.27.1",
     "@skypack/package-check": "0.2.2"
   },
