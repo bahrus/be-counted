@@ -43,10 +43,15 @@ export class BeCounted extends EventTarget {
             value: value + step,
         };
     }
-    disableInc({ incOn, self }) {
+    disableInc({ self }) {
         return [, {
                 'inc': {
-                    abort: incOn,
+                    abort: {
+                        origMethName: 'hydrate',
+                        destMethName: 'inc',
+                        of: self,
+                        on: 'click'
+                    },
                 }
             }];
     }
@@ -70,6 +75,7 @@ export class BeCounted extends EventTarget {
     }
     finale() {
         this.#tx = undefined;
+        this.#txWhenMax = undefined;
     }
 }
 const tagName = 'be-counted';
@@ -103,7 +109,8 @@ define({
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
-                ifKeyIn: ['lt', 'ltOrEq']
+                ifKeyIn: ['lt', 'ltOrEq'],
+                ifNoneOf: ['isMaxedOut']
             },
             disableInc: 'isMaxedOut',
             tx: {

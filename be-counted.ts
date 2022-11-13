@@ -52,10 +52,15 @@ export class BeCounted extends EventTarget implements Actions {
         
     }
 
-    disableInc({incOn, self}: PP){
+    disableInc({self}: PP){
         return [, {
             'inc': {
-                abort: incOn,
+                abort: {
+                    origMethName: 'hydrate',
+                    destMethName: 'inc',
+                    of: self as EventTarget,
+                    on: 'click'
+                },
             }
         }] as PPE;
     }
@@ -82,6 +87,7 @@ export class BeCounted extends EventTarget implements Actions {
 
     finale(): void {
         this.#tx = undefined;
+        this.#txWhenMax = undefined;
     }
 
 }
@@ -118,7 +124,8 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
-                ifKeyIn: ['lt', 'ltOrEq']
+                ifKeyIn: ['lt', 'ltOrEq'],
+                ifNoneOf: ['isMaxedOut']
             },
             disableInc: 'isMaxedOut',
             tx:{
