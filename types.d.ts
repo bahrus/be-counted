@@ -13,7 +13,7 @@ export interface EndUserProps {
     nudge?: boolean;
     incOn?: string;
     incOnSet?: string;
-    incOff?: boolean;
+    isMaxedOut?: boolean;
 }
 
 export interface VirtualProps extends EndUserProps, MinimalProxy{
@@ -31,12 +31,13 @@ export type PP = ProxyProps;
 
 export type PA = Partial<PP>;
 
-export type PPE = [PA, EventConfigs<Proxy, Actions>];
+export type PPE = [PA | undefined, EventConfigs<Proxy, Actions>];
 
 export interface Actions{
     hydrate(pp: PP): PPE;
     inc(pp: PP): PA;
-    check(pp: PP): PA
+    disableInc(pp: PP): PPE;
+    check(pp: PP): PA;
     tx(pp: PP): Promise<void>;
     finale(): void;
     txWhenMax(pp: PP): Promise<void>;

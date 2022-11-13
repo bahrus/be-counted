@@ -1,7 +1,7 @@
 {
   "name": "be-counted",
   "version": "0.0.9",
-  "description": "",
+  "description": "Count events.",
   "keywords": [
     "web components",
     "web component",
@@ -21,7 +21,7 @@
   "types": "./types.d.ts",
   "dependencies": {
     "trans-render": "0.0.641",
-    "be-decorated": "0.0.191",
+    "be-decorated": "0.0.192",
     "be-hive": "0.0.77"
   },
   "devDependencies": {
@@ -38,7 +38,7 @@
     "type": "git",
     "url": "git+https://github.com/bahrus/be-counted.git"
   },
-  "author": "",
+  "author": "Bruce B Anderson <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bahrus/be-counted/issues"

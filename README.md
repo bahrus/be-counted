@@ -30,7 +30,7 @@ Size of new code in this package:
 
 The scope of the transform is configured  via the transformScope setting.
 
-One import use case be-counted can be used for -- disabling a button once it's been clicked:
+One important use case for *be-counted* -- disabling a button once it's been clicked:
 
 ```html
 <span></span>
@@ -44,6 +44,7 @@ One import use case be-counted can be used for -- disabling a button once it's b
     }
 }'>Count</button>
 ```
+
 
 
 ## Using from CDN:

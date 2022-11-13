@@ -2,9 +2,7 @@ import { define } from 'be-decorated/DE.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
     hydrate(pp) {
-        const { self, incOn, min, incOff } = pp;
-        if (incOff)
-            return [{}, {}]; //clears event handler
+        const { self, incOn, min } = pp;
         return [{
                 value: min,
                 resolved: true,
@@ -20,22 +18,22 @@ export class BeCounted extends EventTarget {
         if (step > 0) {
             if (ltOrEq === undefined && lt === undefined)
                 return {
-                    incOff: false,
+                    isMaxed: false,
                     checked: true,
                 };
             if (ltOrEq !== undefined) {
                 return {
-                    incOff: step + value > ltOrEq,
+                    isMaxedOut: step + value > ltOrEq,
                     checked: true,
                 };
             }
             return {
-                incOff: step + value >= lt,
+                isMaxedOut: step + value >= lt,
                 checked: true,
             };
         }
         return {
-            incOff: false,
+            isMaxedOut: false,
             checked: true,
         };
     }
@@ -44,6 +42,13 @@ export class BeCounted extends EventTarget {
         return {
             value: value + step,
         };
+    }
+    disableInc({ incOn, self }) {
+        return [, {
+                'inc': {
+                    abort: incOn,
+                }
+            }];
     }
     #tx;
     async tx(pp) {
@@ -78,9 +83,8 @@ define({
             ifWantsToBe,
             virtualProps: [
                 'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'incOff', 'checked', 'transformWhenMax'
+                'nudge', 'step', 'value', 'transform', 'transformScope', 'checked', 'transformWhenMax', 'isMaxedOut'
             ],
-            nonDryProps: ['incOff', 'incOn'],
             proxyPropDefaults: {
                 step: 1,
                 min: 0,
@@ -88,7 +92,7 @@ define({
                 incOn: 'click',
                 checked: false,
                 value: 0,
-                transformScope: 'parent'
+                transformScope: 'parent',
             },
             emitEvents: ['value'],
             //finale: 'finale'
@@ -99,14 +103,15 @@ define({
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
-                ifKeyIn: ['lt', 'ltOrEq', 'incOff']
+                ifKeyIn: ['lt', 'ltOrEq']
             },
+            disableInc: 'isMaxedOut',
             tx: {
                 ifAllOf: ['transform'],
                 ifKeyIn: ['value']
             },
             txWhenMax: {
-                ifAllOf: ['transformWhenMax', 'incOff']
+                ifAllOf: ['transformWhenMax', 'isMaxedOut']
             }
         }
     },
