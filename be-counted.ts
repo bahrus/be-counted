@@ -57,7 +57,6 @@ export class BeCounted extends EventTarget implements Actions {
             'inc': {
                 abort: {
                     origMethName: 'hydrate',
-                    destMethName: 'inc',
                     of: self as EventTarget,
                     on: 'click'
                 },
