@@ -100,7 +100,11 @@ One important use case for *be-counted* -- disabling a button once it's been cli
 }'>Count</button>
 ```
 
+## Using from ESM Module:
 
+```JavaScript
+import 'be-counted/be-counted.js';
+```
 
 ## Using from CDN:
 
