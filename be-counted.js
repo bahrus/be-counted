@@ -1,8 +1,12 @@
 import { define } from 'be-decorated/DE.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends EventTarget {
-    hydrate(pp) {
-        const { self, incOn, min } = pp;
+    async hydrate(pp) {
+        const { self, incOn, min, nudge } = pp;
+        if (nudge) {
+            const { nudge: n } = await import('trans-render/lib/nudge.js');
+            n(self);
+        }
         return [{
                 value: min,
                 resolved: true,
