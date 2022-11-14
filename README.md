@@ -30,6 +30,61 @@ Size of new code in this package:
 
 The scope of the transform is configured  via the transformScope setting.
 
+Adorning the button element with be-counted causes it to emit event be-decorated.counted.value-changed when the value of the counter changes.  The value of the count can also be obtained via: oButton.beDecorated.counted.value.
+
+The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this decorated is shown below:
+
+```TypeScript
+export interface EndUserProps {
+    /**
+     * How much to increment on each event
+     */
+    step?: number;
+    /**
+     * Don't allow count to exceed this number
+     */
+    ltOrEq?: number;
+    /** Don't allow count to reach this number. */
+    lt?: number;
+    /**
+     * Starting value of count, including after looping
+     */
+    min?: number;
+    /**
+     * Make count loop back to min value after hitting the ceiling set by ltOrEq or lt
+     */
+    loop?: boolean;
+    /**
+     * DTR transform to perform when count hits the maximum value
+     * See https://github.com/bahrus/trans-render for syntax
+     */
+    transformWhenMax?: any;
+    /**
+     * DTR transform to perform after count increments
+     * See https://github.com/bahrus/trans-render for syntax
+     */
+    transform?: {[key: string]: MatchRHS};
+    /**
+     * Specify how wide the surrounding DOM should be subject to the transformation.
+     * Values specified here: https://github.com/bahrus/trans-render/blob/baseline/lib/types.d.ts#L388
+     */
+    transformScope?: Scope;
+    /**
+     * Slowly "awaken" a disabled element.  If the disabled attribute is not set to a number, or is set to "1", removes the disabled attribute.  If it is a larger number, decrements the number by 1. 
+     */
+    nudge?: boolean;
+    /**
+     * Event name to trigger count increment
+     */
+    incOn?: string;
+    /**
+     * Property to subscribe to trigger count increment
+     */
+    incOnSet?: string;
+    
+}
+```
+
 One important use case for *be-counted* -- disabling a button once it's been clicked:
 
 ```html

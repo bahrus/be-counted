@@ -7,8 +7,12 @@ import {ITx} from 'trans-render/lib/types';
 
 export class BeCounted extends EventTarget implements Actions {
 
-    hydrate(pp: PP): [Partial<PP>, EventConfigs<Proxy, Actions>] {
-        const {self, incOn, min} = pp;
+    async hydrate(pp: PP): Promise<[Partial<PP>, EventConfigs<Proxy, Actions>]> {
+        const {self, incOn, min, nudge} = pp;
+        if(nudge){
+            const {nudge: n} = await import('trans-render/lib/nudge.js');
+            n(self);
+        }
         return [{
             value: min,
             resolved: true,
