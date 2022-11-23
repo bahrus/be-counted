@@ -1,30 +1,25 @@
 import { define } from 'be-decorated/DE.js';
 import { register } from 'be-hive/register.js';
+import { inject } from 'be-decorated/inject.js';
 export class BeCounted extends EventTarget {
-    async hydrate(pp) {
-        const { self, incOn, min, nudge } = pp;
+    async hydrate(pp, mold) {
+        const { self, incOn, min: value, nudge } = pp;
         if (nudge) {
             const { nudge: n } = await import('trans-render/lib/nudge.js');
             n(self);
         }
-        return [{
-                value: min,
-                resolved: true,
-            }, {
-                inc: {
-                    on: incOn,
-                    of: self,
-                    doInit: false,
-                }
-            }];
+        return inject({
+            mold,
+            tbdSlots: {
+                on: incOn,
+                of: self
+            }
+        });
     }
-    check({ step, ltOrEq, lt, value }) {
+    check({ step, ltOrEq, lt, value }, mold) {
         if (step > 0) {
             if (ltOrEq === undefined && lt === undefined)
-                return {
-                    isMaxed: false,
-                    checked: true,
-                };
+                return mold;
             if (ltOrEq !== undefined) {
                 return {
                     isMaxedOut: step + value > ltOrEq,
@@ -36,10 +31,7 @@ export class BeCounted extends EventTarget {
                 checked: true,
             };
         }
-        return {
-            isMaxedOut: false,
-            checked: true,
-        };
+        return mold;
     }
     inc(pp) {
         let { value, step } = pp;
@@ -47,16 +39,13 @@ export class BeCounted extends EventTarget {
             value: value + step,
         };
     }
-    disableInc({ self }) {
-        return [, {
-                'inc': {
-                    abort: {
-                        origMethName: 'hydrate',
-                        of: self,
-                        on: 'click'
-                    },
-                }
-            }];
+    disableInc({ self }, mold) {
+        return inject({
+            mold,
+            tbdSlots: {
+                of: self
+            }
+        });
     }
     #tx;
     async tx(pp) {
@@ -104,18 +93,42 @@ define({
                 transformScope: 'parent',
             },
             emitEvents: ['value'],
-            //finale: 'finale'
         },
         actions: {
             check: {
-                ifKeyIn: ['value']
+                ifKeyIn: ['value'],
+                returnObjMold: {
+                    isMaxedOut: false,
+                    checked: true,
+                }
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq'],
-                ifNoneOf: ['isMaxedOut']
+                ifNoneOf: ['isMaxedOut'],
+                returnObjMold: [{
+                        value: 0,
+                        resolved: true,
+                    }, {
+                        inc: {
+                            on: 'tbd',
+                            of: 'tbd',
+                            doInit: false,
+                        }
+                    }]
             },
-            disableInc: 'isMaxedOut',
+            disableInc: {
+                ifAllOf: ['isMaxedOut'],
+                returnObjMold: [, {
+                        'inc': {
+                            abort: {
+                                origMethName: 'hydrate',
+                                of: 'tbd',
+                                on: 'click'
+                            },
+                        }
+                    }]
+            },
             tx: {
                 ifAllOf: ['transform'],
                 ifKeyIn: ['value']

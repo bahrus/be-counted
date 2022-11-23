@@ -3,34 +3,28 @@ import {EventConfigs} from 'be-decorated/types';
 import {Actions, VirtualProps, Proxy, PP, ProxyProps, PA, PPE} from './types';
 import {register} from 'be-hive/register.js';
 import {ITx} from 'trans-render/lib/types';
-
-
+import {inject} from 'be-decorated/inject.js';
 export class BeCounted extends EventTarget implements Actions {
 
-    async hydrate(pp: PP): Promise<[Partial<PP>, EventConfigs<Proxy, Actions>]> {
-        const {self, incOn, min, nudge} = pp;
+    async hydrate(pp: PP, mold: PPE): Promise<PPE> {
+        const {self, incOn, min: value, nudge} = pp;
         if(nudge){
             const {nudge: n} = await import('trans-render/lib/nudge.js');
             n(self);
         }
-        return [{
-            value: min,
-            resolved: true,
-        },{
-            inc: {
-                on: incOn!,
-                of: self,
-                doInit: false,
+
+        return inject<PPE>({
+            mold,
+            tbdSlots: {
+                on: incOn, 
+                of: self
             }
-        }];
+        });
     }
 
-    check({step, ltOrEq, lt, value}: PP){
+    check({step, ltOrEq, lt, value}: PP, mold: PA): PA{
         if(step! > 0){
-            if(ltOrEq === undefined && lt === undefined) return {
-                isMaxed: false,
-                checked: true,
-            } as PA;
+            if(ltOrEq === undefined && lt === undefined) return mold;
             if(ltOrEq !== undefined){
                 return {
                     isMaxedOut: step! + value > ltOrEq,
@@ -42,10 +36,7 @@ export class BeCounted extends EventTarget implements Actions {
                 checked: true,
             } as PA;
         }
-        return {
-            isMaxedOut: false,
-            checked: true,
-        } as PA;
+        return mold;
     }
 
     inc(pp: PP){
@@ -56,16 +47,13 @@ export class BeCounted extends EventTarget implements Actions {
         
     }
 
-    disableInc({self}: PP){
-        return [, {
-            'inc': {
-                abort: {
-                    origMethName: 'hydrate',
-                    of: self as EventTarget,
-                    on: 'click'
-                },
+    disableInc({self}: PP, mold: PPE): PPE{
+        return inject({
+            mold,
+            tbdSlots: {
+                of: self
             }
-        }] as PPE;
+        })
     }
 
     #tx: ITx | undefined;
@@ -119,18 +107,42 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 transformScope: 'parent',
             },
             emitEvents: ['value'],
-            //finale: 'finale'
         },
         actions:{
             check: {
-                ifKeyIn: ['value']
+                ifKeyIn: ['value'],
+                returnObjMold: {
+                    isMaxedOut: false,
+                    checked: true,
+                }
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq'],
-                ifNoneOf: ['isMaxedOut']
+                ifNoneOf: ['isMaxedOut'],
+                returnObjMold: [{
+                    value: 0,
+                    resolved: true,
+                },{
+                    inc: {
+                        on: 'tbd',
+                        of: 'tbd',
+                        doInit: false,
+                    }
+                }]
             },
-            disableInc: 'isMaxedOut',
+            disableInc: {
+                ifAllOf: ['isMaxedOut'],
+                returnObjMold: [, {
+                    'inc': {
+                        abort: {
+                            origMethName: 'hydrate',
+                            of: 'tbd',
+                            on: 'click'
+                        },
+                    }
+                }]
+            },
             tx:{
                 ifAllOf: ['transform'],
                 ifKeyIn: ['value']

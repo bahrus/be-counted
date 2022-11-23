@@ -69,10 +69,10 @@ export type PA = Partial<PP>;
 export type PPE = [PA | undefined, EventConfigs<Proxy, Actions>];
 
 export interface Actions{
-    hydrate(pp: PP): Promise<PPE>;
+    hydrate(pp: PP, mold: PPE): Promise<PPE>;
     inc(pp: PP): PA;
-    disableInc(pp: PP): PPE;
-    check(pp: PP): PA;
+    disableInc(pp: PP, mold: PPE): PPE;
+    check(pp: PP, mold: PA): PA;
     tx(pp: PP): Promise<void>;
     finale(): void;
     txWhenMax(pp: PP): Promise<void>;
