@@ -7,13 +7,20 @@
     <title>Document</title>
 </head>
 <body>
-    <span></span>
-    <button be-counted='{
-        "transform": {
-            "span": "value",
-            ":initiator": "value"
-        }
-    }'>Count</button>
+    <div id=test>
+        <span></span>
+        <button be-counted='{
+            "transform": {
+                "span": "value",
+                ":initiator": "value"
+            }
+        }'>Count</button>
+    </div>
+
+    <div id=newHome>
+
+    </div>
+    <button onclick=moveToNewHome()>Move to new home</button>
     <script type=importmap>
         {
             "imports": {
@@ -26,6 +33,11 @@
     </script>
     <script type=module>
         import '../be-counted.js';
+    </script>
+    <script>
+        function moveToNewHome(){
+            newHome.appendChild(test);
+        }
     </script>
 </body>
 </html>
