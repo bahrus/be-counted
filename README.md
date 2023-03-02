@@ -17,7 +17,7 @@ Size of new code in this package:
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
 
 
-## Sample syntax:
+## JavaScriptObjectNotation:
 
 ```html
 <span></span>
@@ -26,6 +26,15 @@ Size of new code in this package:
         "span": "value"
     }
 }'>Count</button>
+```
+
+## Hemingway Notation [TODO]
+
+```html
+<span></span>
+<button be-counted='
+    Share value to span.
+'>Count</button>
 ```
 
 The scope of the transform is configured  via the transformScope setting.
@@ -87,6 +96,8 @@ export interface EndUserProps {
 
 One important use case for *be-counted* -- disabling a button once it's been clicked:
 
+## JavaScriptObjectNotation
+
 ```html
 <span></span>
 <button be-counted='{
@@ -98,6 +109,17 @@ One important use case for *be-counted* -- disabling a button once it's been cli
         ":initiator": {"disabled": true}
     }
 }'>Count</button>
+```
+
+## Hemingway Notation [TODO]:
+
+```html
+<span></span>
+<button be-counted='
+    Refer to 2 as max value.
+    If value less than max value share value to span.
+    If value equals max value set disabled property of initiator to true.
+'>Count</button>
 ```
 
 ## Using from ESM Module:

@@ -20,13 +20,13 @@
   ],
   "types": "./types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.651",
-    "be-decorated": "0.0.207",
-    "be-hive": "0.0.78"
+    "trans-render": "0.0.668",
+    "be-decorated": "0.0.231",
+    "be-hive": "0.0.82"
   },
   "devDependencies": {
     "may-it-serve": "0.0.4",
-    "@playwright/test": "1.29.0",
+    "@playwright/test": "1.31.1",
     "@skypack/package-check": "0.2.2"
   },
   "scripts": {
