@@ -116,8 +116,8 @@ One important use case for *be-counted* -- disabling a button once it's been cli
 ```html
 <span></span>
 <button be-counted='
-    Refer to 2 as max value.
-    If value less than max value share value to span.
+    Set max value to 1.
+    Share value to span.
     If value equals max value set disabled property of initiator to true.
 '>Count</button>
 ```
