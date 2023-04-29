@@ -18,8 +18,8 @@
         {
             "imports": {
                 "xtal-element/": "../node_modules/xtal-element/",
-                "trans-render/": "../trans-render/",
-                "be-decorated/": "../node_modules/be-decorated/",
+                "trans-render/": "../node_modules/trans-render/",
+                "be-enhanced/": "../node_modules/be-enhanced/",
                 "be-hive/": "../node_modules/be-hive/"
             }
         }
@@ -28,7 +28,6 @@
     <script type=module>
         import '../be-counted.js';
         import {DTR} from 'trans-render/lib/DTR.js';
-        const iff = true || false;
         const dtr = await DTR.transform(templ, {
             host: {typeIsBoolean: false},
             make: {

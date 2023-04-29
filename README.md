@@ -1,8 +1,10 @@
 # be-counted
 
-*be-counted* enables an HTML button (for example) to keep track of how many times it has been clicked.
+*be-counted* enables an HTML button (for example) to keep track of how many times it has been clicked.  
 
 Or in twitterese - it provides a primitive signal on an island of interactivity, which reactively renders to the UI the number of times the button was clicked.
+
+*be-counted* is one of many enhancements/decorators/behaviors based on [*be-enhanced*](https://github.com/bahrus/be-enhanced).
 
 [![Playwright Tests](https://github.com/bahrus/be-counted/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/be-counted/actions/workflows/CI.yml)
 
@@ -39,7 +41,6 @@ Size of new code in this package:
 
 The scope of the transform is configured  via the transformScope setting.
 
-Adorning the button element with be-counted causes it to emit event be-decorated.counted.value-changed when the value of the counter changes.  The value of the count can also be obtained via: oButton.beDecorated.counted.value.
 
 The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this decorator is shown below:
 
