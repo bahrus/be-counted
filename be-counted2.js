@@ -2,12 +2,13 @@ import { BE, propDefaults, propInfo } from 'be-enhanced/BE.js';
 import { XE } from 'xtal-element/XE.js';
 import { register } from 'be-hive/register.js';
 export class BeCounted extends BE {
-    check(self) {
-        const { step, ltOrEq, lt, value } = self;
-        const allGood = {
-            checked: true,
-            isMaxedOut: false,
+    static get beConfig() {
+        return {
+            parse: true,
         };
+    }
+    check(self, allGood) {
+        const { step, ltOrEq, lt, value } = self;
         if (step > 0) {
             if (ltOrEq === undefined && lt === undefined)
                 return allGood;
@@ -46,6 +47,36 @@ export class BeCounted extends BE {
             value: value + step,
         };
     }
+    disableInc(self) {
+        const { enhancedElement, incOn } = self;
+        return [, {
+                inc: {
+                    abort: {
+                        origMethName: 'inc',
+                        on: incOn,
+                        of: enhancedElement
+                    }
+                }
+            }];
+    }
+    #tx;
+    async tx(self) {
+        if (this.#tx === undefined) {
+            const { enhancedElement, transformScope, transform } = self;
+            const { Tx } = await import('trans-render/lib/Tx.js');
+            this.#tx = new Tx(self, enhancedElement, transform, transformScope);
+        }
+        this.#tx.transform();
+    }
+    #txWhenMax;
+    async txWhenMax(self) {
+        if (this.#txWhenMax === undefined) {
+            const { enhancedElement, transformScope, transformWhenMax } = self;
+            const { Tx } = await import('trans-render/lib/Tx.js');
+            this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax, transformScope);
+        }
+        this.#txWhenMax.transform();
+    }
 }
 const tagName = 'be-counted';
 const ifWantsToBe = 'counted';
@@ -74,11 +105,25 @@ const xe = new XE({
         actions: {
             check: {
                 ifKeyIn: ['value'],
+                secondArg: {
+                    checked: true,
+                    isMaxedOut: false,
+                }
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq'],
                 ifNoneOf: ['isMaxedOut'],
+            },
+            disableInc: {
+                ifAllOf: ['isMaxedOut']
+            },
+            tx: {
+                ifAllOf: ['transform'],
+                ifKeyIn: ['value']
+            },
+            txWhenMax: {
+                ifAllOf: ['transformWhenMax', 'isMaxedOut']
             }
         },
     },

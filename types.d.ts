@@ -71,10 +71,10 @@ export type ProPOA = Promise<POA>
  export interface Actions{
     hydrate(self: this, mold: PAP): ProPOA;
     inc(self: this): PAP;
-//     disableInc(pp: PP, mold: PPE): PPE;
-    check(self: this): PAP;
-//     tx(pp: PP): Promise<void>;
+    disableInc(self: this): POA;
+    check(self: this, allGood: PAP): PAP;
+    tx(self: this): Promise<void>;
 //     finale(): void;
-//     txWhenMax(pp: PP): Promise<void>;
+    txWhenMax(self: this): Promise<void>;
 }
 

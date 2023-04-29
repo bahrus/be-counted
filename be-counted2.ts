@@ -3,15 +3,18 @@ import {BEConfig} from 'be-enhanced/types';
 import {XE} from 'xtal-element/XE.js';
 import {Actions, AllProps, AP, PAP, ProPAP, ProPOA, POA} from './types';
 import {register} from 'be-hive/register.js';
+import {ITx} from 'trans-render/lib/types';
 
 export class BeCounted extends BE<AP, Actions> implements Actions{
 
-    check(self: this): PAP{
+    static  override get beConfig(){
+        return {
+            parse: true,
+        } as BEConfig
+    }
+
+    check(self: this, allGood: PAP): PAP{
         const {step, ltOrEq, lt, value} = self;
-        const allGood = {
-            checked: true,
-            isMaxedOut: false,
-        } as PAP;
         if(step! > 0){
             if(ltOrEq === undefined && lt === undefined) return allGood;
             if(ltOrEq !== undefined){
@@ -51,6 +54,39 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
             value: value + step!,
         }
     }
+
+    disableInc(self: this): POA {
+        const {enhancedElement, incOn} = self;
+        return [,{
+            inc: {
+                abort: {
+                    origMethName: 'inc',
+                    on: incOn!,
+                    of: enhancedElement
+                }
+            }
+        }]
+    }
+
+    #tx: ITx | undefined;
+    async tx(self: this){
+        if(this.#tx === undefined){
+            const {enhancedElement, transformScope, transform} = self;
+            const {Tx} = await import('trans-render/lib/Tx.js');
+            this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
+        }
+        this.#tx.transform();
+    }
+
+    #txWhenMax: ITx | undefined;
+    async txWhenMax(self: this){
+        if(this.#txWhenMax === undefined){
+            const {enhancedElement, transformScope, transformWhenMax} = self;
+            const {Tx} = await import('trans-render/lib/Tx.js');
+            this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
+        }
+        this.#txWhenMax.transform();
+    }
 }
 
 export interface BeCounted extends AllProps{}
@@ -83,11 +119,25 @@ const xe = new XE<AP, Actions>({
         actions: {
             check: {
                 ifKeyIn: ['value'],
+                secondArg: {
+                    checked: true,
+                    isMaxedOut: false,
+                }
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq'],
                 ifNoneOf: ['isMaxedOut'],
+            },
+            disableInc: {
+                ifAllOf: ['isMaxedOut']
+            },
+            tx:{
+                ifAllOf: ['transform'],
+                ifKeyIn: ['value']
+            },
+            txWhenMax:{
+                ifAllOf: ['transformWhenMax', 'isMaxedOut']
             }
         },
     },
