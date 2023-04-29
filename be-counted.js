@@ -1,25 +1,17 @@
-import { define } from 'be-decorated/DE.js';
+import { BE, propDefaults, propInfo } from 'be-enhanced/BE.js';
+import { XE } from 'xtal-element/XE.js';
 import { register } from 'be-hive/register.js';
-import { inject } from 'be-decorated/inject.js';
-export class BeCounted extends EventTarget {
-    async hydrate(pp, mold) {
-        const { self, incOn, min: value, nudge } = pp;
-        if (nudge) {
-            const { nudge: n } = await import('trans-render/lib/nudge.js');
-            n(self);
-        }
-        return inject({
-            mold,
-            tbdSlots: {
-                on: incOn,
-                of: self
-            }
-        });
+export class BeCounted extends BE {
+    static get beConfig() {
+        return {
+            parse: true,
+        };
     }
-    check({ step, ltOrEq, lt, value }, mold) {
+    check(self, allGood) {
+        const { step, ltOrEq, lt, value } = self;
         if (step > 0) {
             if (ltOrEq === undefined && lt === undefined)
-                return mold;
+                return allGood;
             if (ltOrEq !== undefined) {
                 return {
                     isMaxedOut: step + value > ltOrEq,
@@ -31,103 +23,100 @@ export class BeCounted extends EventTarget {
                 checked: true,
             };
         }
-        return mold;
+        return allGood;
     }
-    inc(pp) {
-        let { value, step } = pp;
+    async hydrate(self, mold) {
+        const { enhancedElement, incOn, min, nudge } = self;
+        if (nudge) {
+            const { nudge: n } = await import('trans-render/lib/nudge.js');
+            n(self);
+        }
+        return [{
+                resolved: true,
+                value: min,
+            }, {
+                inc: {
+                    on: incOn,
+                    of: enhancedElement
+                }
+            }];
+    }
+    inc(self) {
+        const { value, step } = self;
         return {
             value: value + step,
         };
     }
-    disableInc({ self }, mold) {
-        return inject({
-            mold,
-            tbdSlots: {
-                of: self
-            }
-        });
+    disableInc(self) {
+        const { enhancedElement, incOn } = self;
+        return [, {
+                inc: {
+                    abort: {
+                        origMethName: 'hydrate',
+                        on: incOn,
+                        of: enhancedElement
+                    }
+                }
+            }];
     }
     #tx;
-    async tx(pp) {
+    async tx(self) {
         if (this.#tx === undefined) {
-            const { self, transformScope, proxy, transform } = pp;
+            const { enhancedElement, transformScope, transform } = self;
             const { Tx } = await import('trans-render/lib/Tx.js');
-            this.#tx = new Tx(proxy, self, transform, transformScope);
+            this.#tx = new Tx(self, enhancedElement, transform, transformScope);
         }
         this.#tx.transform();
     }
     #txWhenMax;
-    async txWhenMax(pp) {
+    async txWhenMax(self) {
         if (this.#txWhenMax === undefined) {
-            const { self, transformScope, proxy, transformWhenMax } = pp;
+            const { enhancedElement, transformScope, transformWhenMax } = self;
             const { Tx } = await import('trans-render/lib/Tx.js');
-            this.#txWhenMax = new Tx(proxy, self, transformWhenMax, transformScope);
+            this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax, transformScope);
         }
         this.#txWhenMax.transform();
-    }
-    finale() {
-        this.#tx = undefined;
-        this.#txWhenMax = undefined;
     }
 }
 const tagName = 'be-counted';
 const ifWantsToBe = 'counted';
 const upgrade = '*';
-define({
+const xe = new XE({
     config: {
         tagName,
         propDefaults: {
-            upgrade,
-            ifWantsToBe,
-            virtualProps: [
-                'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min',
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'checked', 'transformWhenMax', 'isMaxedOut'
-            ],
-            proxyPropDefaults: {
-                step: 1,
-                min: 0,
-                loop: false,
-                incOn: 'click',
-                checked: false,
-                value: 0,
-                transformScope: 'parent',
-            },
-            emitEvents: ['value'],
+            ...propDefaults,
+            step: 1,
+            min: 0,
+            loop: false,
+            incOn: 'click',
+            checked: false,
+            value: 0,
+            transformScope: 'p'
+        },
+        propInfo: {
+            ...propInfo,
+            value: {
+                notify: {
+                    dispatch: true
+                }
+            }
         },
         actions: {
             check: {
                 ifKeyIn: ['value'],
-                returnObjMold: {
-                    isMaxedOut: false,
+                secondArg: {
                     checked: true,
+                    isMaxedOut: false,
                 }
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq'],
                 ifNoneOf: ['isMaxedOut'],
-                returnObjMold: [{
-                        value: 0,
-                        resolved: true,
-                    }, {
-                        inc: {
-                            on: 'tbd',
-                            of: 'tbd',
-                            doInit: false,
-                        }
-                    }]
             },
             disableInc: {
-                ifAllOf: ['isMaxedOut'],
-                returnObjMold: [, {
-                        'inc': {
-                            abort: {
-                                origMethName: 'hydrate',
-                                of: 'tbd',
-                                on: 'click'
-                            },
-                        }
-                    }]
+                ifAllOf: ['isMaxedOut']
             },
             tx: {
                 ifAllOf: ['transform'],
@@ -136,10 +125,8 @@ define({
             txWhenMax: {
                 ifAllOf: ['transformWhenMax', 'isMaxedOut']
             }
-        }
+        },
     },
-    complexPropDefaults: {
-        controller: BeCounted
-    }
+    superclass: BeCounted
 });
 register(ifWantsToBe, upgrade, tagName);

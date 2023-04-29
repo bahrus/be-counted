@@ -1,147 +1,137 @@
-import {define, BeDecoratedProps} from 'be-decorated/DE.js';
-import {EventConfigs} from 'be-decorated/types';
-import {Actions, VirtualProps, Proxy, PP, ProxyProps, PA, PPE} from './types';
+import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
+import {BEConfig} from 'be-enhanced/types';
+import {XE} from 'xtal-element/XE.js';
+import {Actions, AllProps, AP, PAP, ProPAP, ProPOA, POA} from './types';
 import {register} from 'be-hive/register.js';
 import {ITx} from 'trans-render/lib/types';
-import {inject} from 'be-decorated/inject.js';
-export class BeCounted extends EventTarget implements Actions {
 
-    async hydrate(pp: PP, mold: PPE): Promise<PPE> {
-        const {self, incOn, min: value, nudge} = pp;
-        if(nudge){
-            const {nudge: n} = await import('trans-render/lib/nudge.js');
-            n(self);
-        }
+export class BeCounted extends BE<AP, Actions> implements Actions{
 
-        return inject<PPE>({
-            mold,
-            tbdSlots: {
-                on: incOn, 
-                of: self
-            }
-        });
+    static  override get beConfig(){
+        return {
+            parse: true,
+        } as BEConfig
     }
 
-    check({step, ltOrEq, lt, value}: PP, mold: PA): PA{
+    check(self: this, allGood: PAP): PAP{
+        const {step, ltOrEq, lt, value} = self;
         if(step! > 0){
-            if(ltOrEq === undefined && lt === undefined) return mold;
+            if(ltOrEq === undefined && lt === undefined) return allGood;
             if(ltOrEq !== undefined){
                 return {
                     isMaxedOut: step! + value > ltOrEq,
                     checked: true,
-                } as PA;
+                } as PAP;
             }
             return {
                 isMaxedOut: step! + value >= lt!,
                 checked: true,
-            } as PA;
+            } as PAP;
         }
-        return mold;
+        return allGood;
     }
 
-    inc(pp: PP){
-        let {value, step} = pp;
+    async hydrate(self: this, mold: PAP): ProPOA {
+        const {enhancedElement, incOn, min, nudge} = self;
+        if(nudge){
+            const {nudge: n} = await import('trans-render/lib/nudge.js');
+            n(self);
+        }
+        return [{
+            resolved: true,
+            value: min,
+        }, {
+            inc: {
+                on: incOn,
+                of: enhancedElement
+            }
+        }] as POA
+    }
+
+    inc(self: this): PAP {
+        const {value, step} = self;
         return {
             value: value + step!,
         }
-        
     }
 
-    disableInc({self}: PP, mold: PPE): PPE{
-        return inject({
-            mold,
-            tbdSlots: {
-                of: self
+    disableInc(self: this): POA {
+        const {enhancedElement, incOn} = self;
+        return [,{
+        
+            inc: {
+                abort: {
+                    origMethName: 'hydrate',
+                    on: incOn!,
+                    of: enhancedElement
+                }
             }
-        })
+        }]
     }
 
     #tx: ITx | undefined;
-    async tx(pp: PP){
+    async tx(self: this){
         if(this.#tx === undefined){
-            const {self, transformScope, proxy, transform} = pp;
+            const {enhancedElement, transformScope, transform} = self;
             const {Tx} = await import('trans-render/lib/Tx.js');
-            this.#tx = new Tx(proxy, self, transform!, transformScope!);
+            this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
         }
         this.#tx.transform();
     }
 
     #txWhenMax: ITx | undefined;
-    async txWhenMax(pp: PP){
+    async txWhenMax(self: this){
         if(this.#txWhenMax === undefined){
-            const {self, transformScope, proxy, transformWhenMax} = pp;
+            const {enhancedElement, transformScope, transformWhenMax} = self;
             const {Tx} = await import('trans-render/lib/Tx.js');
-            this.#txWhenMax = new Tx(proxy, self, transformWhenMax!, transformScope!);
+            this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
         }
         this.#txWhenMax.transform();
     }
-
-    finale(): void {
-        this.#tx = undefined;
-        this.#txWhenMax = undefined;
-    }
-
 }
+
+export interface BeCounted extends AllProps{}
 
 const tagName = 'be-counted';
 const ifWantsToBe = 'counted';
 const upgrade = '*';
 
-define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
-    config:{
+const xe = new XE<AP, Actions>({
+    config: {
         tagName,
-        propDefaults:{
-            upgrade,
-            ifWantsToBe,
-            virtualProps: [
-                'incOn', 'incOnSet', 'loop', 'lt', 'ltOrEq', 'min', 
-                'nudge', 'step', 'value', 'transform', 'transformScope', 'checked', 'transformWhenMax', 'isMaxedOut'
-            ],
-            proxyPropDefaults: {
-                step: 1,
-                min: 0,
-                loop: false,
-                incOn: 'click',
-                checked: false,
-                value: 0,
-                transformScope: 'parent',
-            },
-            emitEvents: ['value'],
+        propDefaults: {
+            ...propDefaults,
+            step: 1,
+            min: 0, 
+            loop: false,
+            incOn: 'click',
+            checked: false,
+            value: 0,
+            transformScope: 'p'
         },
-        actions:{
+        propInfo:{
+            ...propInfo,
+            value: {
+                notify:{
+                    dispatch: true
+                }
+            }
+        },
+        actions: {
             check: {
                 ifKeyIn: ['value'],
-                returnObjMold: {
-                    isMaxedOut: false,
+                secondArg: {
                     checked: true,
+                    isMaxedOut: false,
                 }
             },
             hydrate: {
                 ifAllOf: ['incOn', 'checked'],
                 ifKeyIn: ['lt', 'ltOrEq'],
                 ifNoneOf: ['isMaxedOut'],
-                returnObjMold: [{
-                    value: 0,
-                    resolved: true,
-                },{
-                    inc: {
-                        on: 'tbd',
-                        of: 'tbd',
-                        doInit: false,
-                    }
-                }]
             },
             disableInc: {
-                ifAllOf: ['isMaxedOut'],
-                returnObjMold: [, {
-                    'inc': {
-                        abort: {
-                            origMethName: 'hydrate',
-                            of: 'tbd',
-                            on: 'click'
-                        },
-                    }
-                }]
+                ifAllOf: ['isMaxedOut']
             },
             tx:{
                 ifAllOf: ['transform'],
@@ -150,10 +140,9 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             txWhenMax:{
                 ifAllOf: ['transformWhenMax', 'isMaxedOut']
             }
-        }
+        },
     },
-    complexPropDefaults:{
-        controller: BeCounted
-    }
+    superclass: BeCounted
 });
+
 register(ifWantsToBe, upgrade, tagName);
