@@ -9,10 +9,9 @@
 		"watch": true
 	},
 	"files":[
-		"be-counted.ts"
+		"be-counted2.ts"
 	],
 	"exclude":[
-		"build",
 		"node_modules",
 	]
 

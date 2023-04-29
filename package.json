@@ -16,18 +16,19 @@
     "./be-counted.js": "./be-counted.js"
   },
   "files": [
-    "*.*"
+    "*.js",
+    "types.d.ts"
   ],
   "types": "./types.d.ts",
   "dependencies": {
-    "trans-render": "0.0.668",
-    "be-decorated": "0.0.231",
-    "be-hive": "0.0.82"
+    "be-enhanced": "0.0.11",
+    "be-hive": "0.0.90",
+    "trans-render": "0.0.673",
+    "xtal-element": "0.0.558"
   },
   "devDependencies": {
-    "may-it-serve": "0.0.4",
-    "@playwright/test": "1.31.1",
-    "@skypack/package-check": "0.2.2"
+    "@playwright/test": "1.33.0",
+    "may-it-serve": "0.0.5"
   },
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",

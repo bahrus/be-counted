@@ -1,7 +1,8 @@
-import {BeDecoratedProps, MinimalProxy, EventConfigs} from 'be-decorated/types';
 import {MatchRHS, Scope} from 'trans-render/lib/types';
+import {ActionOnEventConfigs} from 'trans-render/froop/types';
+import {IBE} from 'be-enhanced/types';
 
-export interface EndUserProps {
+export interface EndUserProps extends IBE {
     /**
      * How much to increment on each event
      */
@@ -50,31 +51,30 @@ export interface EndUserProps {
     
 }
 
-export interface VirtualProps extends EndUserProps, MinimalProxy{
+export interface AllProps extends EndUserProps{
     value: number;
     checked: boolean;
     isMaxedOut?: boolean;
 }
 
-export type Proxy = Element & VirtualProps;
 
-export interface ProxyProps extends VirtualProps{
-    proxy: Proxy
-}
+export type AP = AllProps;
 
-export type PP = ProxyProps;
+export type PAP = Partial<AP>;
 
-export type PA = Partial<PP>;
+export type ProPAP = Promise<PAP>
 
-export type PPE = [PA | undefined, EventConfigs<Proxy, Actions>];
+export type POA = [PAP | undefined, ActionOnEventConfigs<PAP, Actions>];
 
-export interface Actions{
-    hydrate(pp: PP, mold: PPE): Promise<PPE>;
-    inc(pp: PP): PA;
-    disableInc(pp: PP, mold: PPE): PPE;
-    check(pp: PP, mold: PA): PA;
-    tx(pp: PP): Promise<void>;
-    finale(): void;
-    txWhenMax(pp: PP): Promise<void>;
+export type ProPOA = Promise<POA>
+
+ export interface Actions{
+    hydrate(self: this, mold: PAP): ProPOA;
+    inc(self: this): PAP;
+//     disableInc(pp: PP, mold: PPE): PPE;
+    check(self: this): PAP;
+//     tx(pp: PP): Promise<void>;
+//     finale(): void;
+//     txWhenMax(pp: PP): Promise<void>;
 }
 
