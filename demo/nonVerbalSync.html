@@ -8,8 +8,11 @@
 </head>
 <body>
     <template id=templ>
-        <span></span>
-        <button>Count</button>
+        <div>
+            <span></span>
+            <button>Count</button>
+        </div>
+
     </template>
     <div id=target></div>
 
@@ -18,7 +21,7 @@
         {
             "imports": {
                 "xtal-element/": "../node_modules/xtal-element/",
-                "trans-render/": "../node_modules/trans-render/",
+                "trans-render/": "../trans-render/",
                 "be-enhanced/": "../node_modules/be-enhanced/",
                 "be-hive/": "../node_modules/be-hive/"
             }
@@ -39,10 +42,12 @@
                             ":initiator": "value"
                         }
                         
-                    }
+                    },
+                    waitForResolved: true
                 }
             }
         }, target);
+
     </script>
 </body>
 </html>

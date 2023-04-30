@@ -32,13 +32,13 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
     }
 
     async hydrate(self: this, mold: PAP): ProPOA {
-        const {enhancedElement, incOn, min, nudge} = self;
+        const {enhancedElement, incOn, min, nudge, transform} = self;
         if(nudge){
             const {nudge: n} = await import('trans-render/lib/nudge.js');
             n(self);
         }
         return [{
-            resolved: true,
+            resolved: transform === undefined,
             value: min,
         }, {
             inc: {
@@ -76,7 +76,10 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
             const {Tx} = await import('trans-render/lib/Tx.js');
             this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
         }
-        this.#tx.transform();
+        await this.#tx.transform();
+        return {
+            resolved: true
+        }
     }
 
     #txWhenMax: ITx | undefined;
