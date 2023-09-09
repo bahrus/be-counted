@@ -127,13 +127,7 @@ One important use case for *be-counted* -- disabling a button once it's been cli
 '>Count</button>
 ```
 
-As far as the full specification in Hemingway Notation:
-
-```html
-<button be-counted>
-```
-
-Examples of setting all the properties the Hemingway way:
+Examples of setting all the supported properties the Hemingway way:
 
 ```html
 <button be-counted='
