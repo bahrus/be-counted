@@ -10,7 +10,7 @@ Or in twitterese - it provides a primitive signal on an island of interactivity,
 
 <a href="https://nodei.co/npm/be-counted/"><img src="https://nodei.co/npm/be-counted.png"></a>
 
-Size of package, including custom element behavior framework (be-decorated):
+Size of package, including custom element behavior framework (be-enhanced):
 
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/be-counted?style=for-the-badge)](https://bundlephobia.com/result?p=be-counted)
 
@@ -96,6 +96,37 @@ export interface EndUserProps {
 }
 ```
 
+
+## Use case:  disable on click
+
+One important use case for *be-counted* -- disabling a button once it's been clicked:
+
+## JavaScriptObjectNotation
+
+```html
+<span></span>
+<button be-counted='{
+    "lt": 2,
+    "transform": {
+        "span": "value"
+    },
+    
+}'>Count</button>
+```
+
+## Hemingway Notation [TODO]:
+
+```html
+<span></span>
+<button be-counted='
+    "transformWhenMax": {
+        ":$0": {"disabled": true}
+    }
+    Stop at 1.
+    Share value to span.
+'>Count</button>
+```
+
 As far as the full specification in Hemingway Notation:
 
 ```html
@@ -112,39 +143,8 @@ Increment by 7 on value property of $0 being set.
 Stop at infinity.
 Loop at 10.
 Nudge $0.
-Share value to span.
-Share maximum value to $0:disabled.
+Share value to span within parent scope.
 '>
-```
-
-## Use case:  disable on click
-
-One important use case for *be-counted* -- disabling a button once it's been clicked:
-
-## JavaScriptObjectNotation
-
-```html
-<span></span>
-<button be-counted='{
-    "lt": 2,
-    "transform": {
-        "span": "value"
-    },
-    "transformWhenMax": {
-        ":$0": {"disabled": true}
-    }
-}'>Count</button>
-```
-
-## Hemingway Notation [TODO]:
-
-```html
-<span></span>
-<button be-counted='
-    Set max value to 1.
-    Share value to span.
-    If value equals max value set disabled property of $0 to true.
-'>Count</button>
 ```
 
 
