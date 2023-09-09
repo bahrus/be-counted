@@ -55,6 +55,7 @@ export interface AllProps extends EndUserProps{
     value: number;
     checked: boolean;
     isMaxedOut?: boolean;
+    isParsed?: boolean;
 }
 
 

@@ -5,6 +5,7 @@ export class BeCounted extends BE {
     static get beConfig() {
         return {
             parse: true,
+            isParsedProp: 'isParsed'
         };
     }
     check(self, allGood) {
@@ -93,9 +94,9 @@ const xe = new XE({
             min: 0,
             loop: false,
             incOn: 'click',
-            checked: false,
             value: 0,
-            transformScope: 'p'
+            transformScope: 'p',
+            checked: false,
         },
         propInfo: {
             ...propInfo,
@@ -114,7 +115,7 @@ const xe = new XE({
                 }
             },
             hydrate: {
-                ifAllOf: ['incOn', 'checked'],
+                ifAllOf: ['incOn', 'checked', 'isParsed'],
                 ifKeyIn: ['lt', 'ltOrEq'],
                 ifNoneOf: ['isMaxedOut'],
             },

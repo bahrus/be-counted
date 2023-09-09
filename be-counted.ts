@@ -10,6 +10,7 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
     static  override get beConfig(){
         return {
             parse: true,
+            isParsedProp: 'isParsed'
         } as BEConfig
     }
 
@@ -108,9 +109,9 @@ const xe = new XE<AP, Actions>({
             min: 0, 
             loop: false,
             incOn: 'click',
-            checked: false,
             value: 0,
-            transformScope: 'p'
+            transformScope: 'p',
+            checked: false,
         },
         propInfo:{
             ...propInfo,
@@ -129,7 +130,7 @@ const xe = new XE<AP, Actions>({
                 }
             },
             hydrate: {
-                ifAllOf: ['incOn', 'checked'],
+                ifAllOf: ['incOn', 'checked', 'isParsed'],
                 ifKeyIn: ['lt', 'ltOrEq'],
                 ifNoneOf: ['isMaxedOut'],
             },
