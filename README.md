@@ -41,6 +41,7 @@ Size of new code in this package:
 
 The scope of the transform is configured  via the transformScope setting.
 
+## Full specification
 
 The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this decorator is shown below:
 
@@ -95,6 +96,29 @@ export interface EndUserProps {
 }
 ```
 
+As far as the full specification in Hemingway Notation:
+
+```html
+<button be-counted>
+```
+
+Examples of setting all the properties the Hemingway way:
+
+```html
+<button be-counted='
+Start at 0.
+Increment by 1 on click.
+Increment by 7 on value property of $0 being set.
+Stop at infinity.
+Loop at 10.
+Nudge $0.
+Share value to span.
+Share maximum value to $0:disabled.
+'>
+```
+
+## Use case:  disable on click
+
 One important use case for *be-counted* -- disabling a button once it's been clicked:
 
 ## JavaScriptObjectNotation
@@ -122,6 +146,8 @@ One important use case for *be-counted* -- disabling a button once it's been cli
     If value equals max value set disabled property of $0 to true.
 '>Count</button>
 ```
+
+
 
 ## Running locally
 
