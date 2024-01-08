@@ -66,15 +66,10 @@ export interface EndUserProps {
      */
     loop?: boolean;
     /**
-     * DTR transform to perform when count hits the maximum value
+     * TR transform to perform after count increments
      * See https://github.com/bahrus/trans-render for syntax
      */
-    transformWhenMax?: any;
-    /**
-     * DTR transform to perform after count increments
-     * See https://github.com/bahrus/trans-render for syntax
-     */
-    transform?: {[key: string]: MatchRHS};
+    transform?: XForm;
     /**
      * Specify how wide the surrounding DOM should be subject to the transformation.
      * Values specified here: https://github.com/bahrus/trans-render/blob/baseline/lib/types.d.ts#L388
@@ -112,33 +107,6 @@ One important use case for *be-counted* -- disabling a button once it's been cli
     },
     
 }'>Count</button>
-```
-
-## Hemingway Notation [TODO]:
-
-```html
-<span></span>
-<button be-counted='
-    "transformWhenMax": {
-        ":$0": {"disabled": true}
-    }
-    Stop at 1.
-    Share value to span.
-'>Count</button>
-```
-
-Examples of setting all the supported properties the Hemingway way:
-
-```html
-<button be-counted='
-Start at 0.
-Increment by 1 on click.
-Increment by 7 on value property of $0 being set.
-Stop at infinity.
-Loop at 10.
-Nudge $0.
-Share value to span within parent scope.
-'>
 ```
 
 

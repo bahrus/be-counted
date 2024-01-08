@@ -2,8 +2,6 @@ import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
 import {BEConfig} from 'be-enhanced/types';
 import {XE} from 'xtal-element/XE.js';
 import {Actions, AllProps, AP, PAP, ProPAP, ProPOA, POA} from './types';
-import {register} from 'be-hive/register.js';
-import {} from 'trans-render/types';
 
 export class BeCounted extends BE<AP, Actions> implements Actions{
 
@@ -110,9 +108,8 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
 
 export interface BeCounted extends AllProps{}
 
-const tagName = 'be-counted';
-const ifWantsToBe = 'counted';
-const upgrade = '*';
+export const tagName = 'be-counted';
+
 
 const xe = new XE<AP, Actions>({
     config: {
@@ -159,5 +156,3 @@ const xe = new XE<AP, Actions>({
     },
     superclass: BeCounted
 });
-
-register(ifWantsToBe, upgrade, tagName);
