@@ -3,7 +3,7 @@ import {BEConfig} from 'be-enhanced/types';
 import {XE} from 'xtal-element/XE.js';
 import {Actions, AllProps, AP, PAP, ProPAP, ProPOA, POA} from './types';
 import {register} from 'be-hive/register.js';
-import {ITx} from 'trans-render/lib/types';
+import {} from 'trans-render/types';
 
 export class BeCounted extends BE<AP, Actions> implements Actions{
 
@@ -70,27 +70,41 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
         }]
     }
 
-    #tx: ITx | undefined;
-    async tx(self: this){
-        if(this.#tx === undefined){
-            const {enhancedElement, transformScope, transform} = self;
-            const {Tx} = await import('trans-render/lib/Tx.js');
-            this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
-        }
-        await this.#tx.transform();
-        return {
-            resolved: true
-        }
-    }
+    // #tx: ITx | undefined;
+    // async tx(self: this){
+    //     if(this.#tx === undefined){
+    //         const {enhancedElement, transformScope, transform} = self;
+    //         const {Tx} = await import('trans-render/lib/Tx.js');
+    //         this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
+    //     }
+    //     await this.#tx.transform();
+    //     return {
+    //         resolved: true
+    //     }
+    // }
 
-    #txWhenMax: ITx | undefined;
-    async txWhenMax(self: this){
-        if(this.#txWhenMax === undefined){
-            const {enhancedElement, transformScope, transformWhenMax} = self;
-            const {Tx} = await import('trans-render/lib/Tx.js');
-            this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
+    // #txWhenMax: ITx | undefined;
+    // async txWhenMax(self: this){
+    //     if(this.#txWhenMax === undefined){
+    //         const {enhancedElement, transformScope, transformWhenMax} = self;
+    //         const {Tx} = await import('trans-render/lib/Tx.js');
+    //         this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
+    //     }
+    //     this.#txWhenMax.transform();
+    // }
+
+    async hydrateTransform(self: this): ProPAP{
+        const {transformScope, enhancedElement, transform} = self;
+        const {findRealm} = await import('trans-render/lib/findRealm.js');
+        const target = await findRealm(enhancedElement, transformScope!);
+        const propagator = (<any>self).xtalState;
+        const {Transform} = await import('trans-render/Transform.js');
+        const transformer =  await Transform(target as Element, self, transform!, {
+            propagator
+        });
+        return {
+            transformer
         }
-        this.#txWhenMax.transform();
     }
 }
 
@@ -137,13 +151,10 @@ const xe = new XE<AP, Actions>({
             disableInc: {
                 ifAllOf: ['isMaxedOut']
             },
-            tx:{
-                ifAllOf: ['transform'],
-                ifKeyIn: ['value']
+            hydrateTransform:{
+                ifAllOf: ['transform', 'isParsed'],
             },
-            txWhenMax:{
-                ifAllOf: ['transformWhenMax', 'isMaxedOut']
-            }
+            
         },
     },
     superclass: BeCounted

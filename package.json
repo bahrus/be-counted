@@ -21,14 +21,14 @@
   ],
   "types": "./types.d.ts",
   "dependencies": {
-    "be-enhanced": "0.0.48",
-    "be-hive": "0.0.119",
-    "trans-render": "0.0.705",
-    "xtal-element": "0.0.577"
+    "be-enhanced": "0.0.58",
+    "be-hive": "0.0.129",
+    "trans-render": "0.0.724",
+    "xtal-element": "0.0.581"
   },
   "devDependencies": {
-    "@playwright/test": "1.37.1",
-    "may-it-serve": "0.0.5"
+    "@playwright/test": "1.40.1",
+    "may-it-serve": "0.0.6"
   },
   "scripts": {
     "serve": "node node_modules/may-it-serve/serve.js",

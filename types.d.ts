@@ -1,6 +1,7 @@
 import {MatchRHS, Scope} from 'trans-render/lib/types';
 import {ActionOnEventConfigs} from 'trans-render/froop/types';
 import {IBE} from 'be-enhanced/types';
+import {XForm, ITransformer} from 'trans-render/types';
 
 export interface EndUserProps extends IBE {
     /**
@@ -22,15 +23,10 @@ export interface EndUserProps extends IBE {
      */
     loop?: boolean;
     /**
-     * DTR transform to perform when count hits the maximum value
-     * See https://github.com/bahrus/trans-render for syntax
-     */
-    transformWhenMax?: any;
-    /**
      * DTR transform to perform after count increments
      * See https://github.com/bahrus/trans-render for syntax
      */
-    transform?: {[key: string]: MatchRHS};
+    transform?: XForm<AP, Actions>;
     /**
      * Specify how wide the surrounding DOM should be subject to the transformation.
      * Values specified here: https://github.com/bahrus/trans-render/blob/baseline/lib/types.d.ts#L388
@@ -56,6 +52,7 @@ export interface AllProps extends EndUserProps{
     checked: boolean;
     isMaxedOut?: boolean;
     isParsed?: boolean;
+    transformer?: ITransformer<AP, Actions>
 }
 
 
@@ -74,8 +71,6 @@ export type ProPOA = Promise<POA>
     inc(self: this): PAP;
     disableInc(self: this): POA;
     check(self: this, allGood: PAP): PAP;
-    tx(self: this): Promise<void>;
-//     finale(): void;
-    txWhenMax(self: this): Promise<void>;
+    hydrateTransform(self: this): ProPAP;
 }
 

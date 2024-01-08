@@ -60,26 +60,39 @@ export class BeCounted extends BE {
                 }
             }];
     }
-    #tx;
-    async tx(self) {
-        if (this.#tx === undefined) {
-            const { enhancedElement, transformScope, transform } = self;
-            const { Tx } = await import('trans-render/lib/Tx.js');
-            this.#tx = new Tx(self, enhancedElement, transform, transformScope);
-        }
-        await this.#tx.transform();
+    // #tx: ITx | undefined;
+    // async tx(self: this){
+    //     if(this.#tx === undefined){
+    //         const {enhancedElement, transformScope, transform} = self;
+    //         const {Tx} = await import('trans-render/lib/Tx.js');
+    //         this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
+    //     }
+    //     await this.#tx.transform();
+    //     return {
+    //         resolved: true
+    //     }
+    // }
+    // #txWhenMax: ITx | undefined;
+    // async txWhenMax(self: this){
+    //     if(this.#txWhenMax === undefined){
+    //         const {enhancedElement, transformScope, transformWhenMax} = self;
+    //         const {Tx} = await import('trans-render/lib/Tx.js');
+    //         this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
+    //     }
+    //     this.#txWhenMax.transform();
+    // }
+    async hydrateTransform(self) {
+        const { transformScope, enhancedElement, transform } = self;
+        const { findRealm } = await import('trans-render/lib/findRealm.js');
+        const target = await findRealm(enhancedElement, transformScope);
+        const propagator = self.xtalState;
+        const { Transform } = await import('trans-render/Transform.js');
+        const transformer = await Transform(target, self, transform, {
+            propagator
+        });
         return {
-            resolved: true
+            transformer
         };
-    }
-    #txWhenMax;
-    async txWhenMax(self) {
-        if (this.#txWhenMax === undefined) {
-            const { enhancedElement, transformScope, transformWhenMax } = self;
-            const { Tx } = await import('trans-render/lib/Tx.js');
-            this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax, transformScope);
-        }
-        this.#txWhenMax.transform();
     }
 }
 const tagName = 'be-counted';
@@ -122,13 +135,9 @@ const xe = new XE({
             disableInc: {
                 ifAllOf: ['isMaxedOut']
             },
-            tx: {
-                ifAllOf: ['transform'],
-                ifKeyIn: ['value']
+            hydrateTransform: {
+                ifAllOf: ['transform', 'isParsed'],
             },
-            txWhenMax: {
-                ifAllOf: ['transformWhenMax', 'isMaxedOut']
-            }
         },
     },
     superclass: BeCounted
