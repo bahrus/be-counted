@@ -30,14 +30,6 @@ Size of new code in this package:
 }'>Count</button>
 ```
 
-## Hemingway Notation [TODO]
-
-```html
-<span></span>
-<button be-counted='
-    Share value to span.
-'>Count</button>
-```
 
 The scope of the transform is configured  via the transformScope setting.
 

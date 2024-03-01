@@ -3,7 +3,7 @@ import {ActionOnEventConfigs} from 'trans-render/froop/types';
 import {IBE} from 'be-enhanced/types';
 import {XForm, ITransformer} from 'trans-render/types';
 
-export interface EndUserProps extends IBE {
+export interface EndUserPropsBasic{
     /**
      * How much to increment on each event
      */
@@ -26,7 +26,7 @@ export interface EndUserProps extends IBE {
      * DTR transform to perform after count increments
      * See https://github.com/bahrus/trans-render for syntax
      */
-    transform?: XForm<AP, Actions>;
+    transform?: XForm<EndUserPropsBasic, Actions, {}>;
     /**
      * Specify how wide the surrounding DOM should be subject to the transformation.
      * Values specified here: https://github.com/bahrus/trans-render/blob/baseline/lib/types.d.ts#L388
@@ -46,13 +46,16 @@ export interface EndUserProps extends IBE {
     incOnSet?: string;
     
 }
+export interface EndUserProps extends EndUserPropsBasic, IBE {
+
+}
 
 export interface AllProps extends EndUserProps{
     value: number;
     checked: boolean;
     isMaxedOut?: boolean;
     isParsed?: boolean;
-    transformer?: ITransformer<AP, Actions>
+    transformer?: ITransformer<EndUserPropsBasic, Actions, {}>
 }
 
 

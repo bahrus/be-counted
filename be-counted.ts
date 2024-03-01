@@ -1,7 +1,7 @@
 import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
 import {BEConfig} from 'be-enhanced/types';
 import {XE} from 'xtal-element/XE.js';
-import {Actions, AllProps, AP, PAP, ProPAP, ProPOA, POA} from './types';
+import {Actions, AllProps, AP, PAP, ProPAP, ProPOA, POA, EndUserPropsBasic} from './types';
 
 export class BeCounted extends BE<AP, Actions> implements Actions{
 
@@ -68,28 +68,6 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
         }]
     }
 
-    // #tx: ITx | undefined;
-    // async tx(self: this){
-    //     if(this.#tx === undefined){
-    //         const {enhancedElement, transformScope, transform} = self;
-    //         const {Tx} = await import('trans-render/lib/Tx.js');
-    //         this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
-    //     }
-    //     await this.#tx.transform();
-    //     return {
-    //         resolved: true
-    //     }
-    // }
-
-    // #txWhenMax: ITx | undefined;
-    // async txWhenMax(self: this){
-    //     if(this.#txWhenMax === undefined){
-    //         const {enhancedElement, transformScope, transformWhenMax} = self;
-    //         const {Tx} = await import('trans-render/lib/Tx.js');
-    //         this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
-    //     }
-    //     this.#txWhenMax.transform();
-    // }
 
     async hydrateTransform(self: this): ProPAP{
         const {transformScope, enhancedElement, transform} = self;
@@ -97,7 +75,7 @@ export class BeCounted extends BE<AP, Actions> implements Actions{
         const target = await findRealm(enhancedElement, transformScope!);
         const propagator = (<any>self).xtalState;
         const {Transform} = await import('trans-render/Transform.js');
-        const transformer =  await Transform(target as Element, self, transform!, {
+        const transformer =  await Transform<EndUserPropsBasic, Actions, {}>(target as Element, self, transform!, {
             propagator
         });
         return {

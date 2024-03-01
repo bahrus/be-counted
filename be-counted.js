@@ -59,27 +59,6 @@ export class BeCounted extends BE {
                 }
             }];
     }
-    // #tx: ITx | undefined;
-    // async tx(self: this){
-    //     if(this.#tx === undefined){
-    //         const {enhancedElement, transformScope, transform} = self;
-    //         const {Tx} = await import('trans-render/lib/Tx.js');
-    //         this.#tx = new Tx(self, enhancedElement, transform!, transformScope!);
-    //     }
-    //     await this.#tx.transform();
-    //     return {
-    //         resolved: true
-    //     }
-    // }
-    // #txWhenMax: ITx | undefined;
-    // async txWhenMax(self: this){
-    //     if(this.#txWhenMax === undefined){
-    //         const {enhancedElement, transformScope, transformWhenMax} = self;
-    //         const {Tx} = await import('trans-render/lib/Tx.js');
-    //         this.#txWhenMax = new Tx(self, enhancedElement, transformWhenMax!, transformScope!);
-    //     }
-    //     this.#txWhenMax.transform();
-    // }
     async hydrateTransform(self) {
         const { transformScope, enhancedElement, transform } = self;
         const { findRealm } = await import('trans-render/lib/findRealm.js');
