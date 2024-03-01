@@ -7,15 +7,8 @@ Or in twitterese - it provides a primitive signal on an island of interactivity,
 *be-counted* is one of many enhancements/decorators/behaviors based on [*be-enhanced*](https://github.com/bahrus/be-enhanced).
 
 [![Playwright Tests](https://github.com/bahrus/be-counted/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/be-counted/actions/workflows/CI.yml)
-
-<a href="https://nodei.co/npm/be-counted/"><img src="https://nodei.co/npm/be-counted.png"></a>
-
-Size of package, including custom element behavior framework (be-enhanced):
-
+[![NPM version](https://badge.fury.io/js/be-counted.png)](http://badge.fury.io/js/be-counted)
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/be-counted?style=for-the-badge)](https://bundlephobia.com/result?p=be-counted)
-
-Size of new code in this package:
-
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
 
 
