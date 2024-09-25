@@ -52,7 +52,7 @@ Specifying the places to share the value with is done via [DSSArray notation](ht
 
 ## Full specification
 
-The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this decorator is shown below:
+The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this enhancement is shown below:
 
 ```TypeScript
 export interface EndUserProps {
@@ -74,16 +74,7 @@ export interface EndUserProps {
      * Make count loop back to min value after hitting the ceiling set by ltOrEq or lt
      */
     loop?: boolean;
-    /**
-     * TR transform to perform after count increments
-     * See https://github.com/bahrus/trans-render for syntax
-     */
-    xform?: XForm;
-    /**
-     * Specify how wide the surrounding DOM should be subject to the transformation.
-     * Values specified here: https://github.com/bahrus/trans-render/blob/baseline/lib/types.d.ts#L388
-     */
-    transformScope?: Scope;
+
     /**
      * Slowly "awaken" a disabled element.  If the disabled attribute is not set to a number, or is set to "1", removes the disabled attribute.  If it is a larger number, decrements the number by 1. 
      */
@@ -99,6 +90,21 @@ export interface EndUserProps {
     
 }
 ```
+
+```html
+<span></span>
+<button disabled be-counted='
+    {"nudge": true, "min": 3, "loop": true}
+    and share value with span
+'
+be-counted-lt-or-eq=17
+>Count</button>
+```
+
+We can use this specification in one of two ways (or a combo of the two, as shown below):
+
+## Example 3 - Tweaking with JavaScriptObjectNotation and/or attribute branches:
+
 
 
 ## Use case:  disable on click
