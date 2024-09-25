@@ -1,4 +1,4 @@
-# be-counted (🔢) [WIP]
+# be-counted (🔢) [TODO]
 
 *be-counted* enables an HTML button (for example) to keep track of how many times it has been clicked.  
 
@@ -12,19 +12,44 @@ Or in twitterese - it provides a primitive signal on an island of interactivity,
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
 
 
-## JavaScriptObjectNotation:
+## Example 1 Counting silently [TODO]
 
 ```html
-<span></span>
-<button be-counted='{
-    "xform": {
-        "span": "value"
-    }
-}'>Count</button>
+<button id=oButton be-counted>Count</button>
 ```
 
 
-The scope of the transform is configured  via the transformScope setting.
+The value of the count can be obtained via (more or less):
+
+```JavaScript
+oButton.beEnhanced.beCounted.value;
+oButton.beEnhanced.beCounted.addEventListener('value', e => {
+    ...
+})
+```
+
+"More or less" refers to needing to wait for the enhancement to load, which is a bit of a pain:
+
+```JavaScript
+import 'be-counted/behivior.js';
+await customElements.whenDefined('be-enhanced');
+const beCounted = oButton.beEnhanced.whenResolved('be-counted');
+console.log({value: beCounted.value});
+beCounted.addEventListener('value', e => {
+    // value has changed
+})
+```
+
+To  alleviate that pain, be-counted has some built in mechanisms for sharing the value
+
+## Example 2 Sharing the value
+
+```html
+<span></span>
+<button be-counted="and share value with span">Count</button>
+```
+
+Specifying the places to share the value with is done via [DSSArray notation](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)).
 
 ## Full specification
 
