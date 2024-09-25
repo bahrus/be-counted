@@ -1,4 +1,4 @@
-# be-counted
+# be-counted (🔢) [WIP]
 
 *be-counted* enables an HTML button (for example) to keep track of how many times it has been clicked.  
 
@@ -17,7 +17,7 @@ Or in twitterese - it provides a primitive signal on an island of interactivity,
 ```html
 <span></span>
 <button be-counted='{
-    "transform": {
+    "xform": {
         "span": "value"
     }
 }'>Count</button>
@@ -54,7 +54,7 @@ export interface EndUserProps {
      * TR transform to perform after count increments
      * See https://github.com/bahrus/trans-render for syntax
      */
-    transform?: XForm;
+    xform?: XForm;
     /**
      * Specify how wide the surrounding DOM should be subject to the transformation.
      * Values specified here: https://github.com/bahrus/trans-render/blob/baseline/lib/types.d.ts#L388
