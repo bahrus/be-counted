@@ -31,7 +31,7 @@ oButton.beEnhanced.beCounted.addEventListener('value', e => {
 "More or less" refers to needing to wait for the enhancement to load, which is a bit of a pain:
 
 ```JavaScript
-await import('be-counted/behivior.js'0;
+await import('be-counted/behivior.js');
 const beCounted = oButton.beEnhanced.whenResolved('be-counted');
 console.log({value: beCounted.value});
 beCounted.addEventListener('value', e => {
@@ -91,6 +91,9 @@ export interface EndUserProps {
 }
 ```
 
+We can use this specification in one of two ways (or a combo of the two, as shown below):
+
+
 ```html
 <span></span>
 <button disabled be-counted='
@@ -101,7 +104,6 @@ be-counted-lt-or-eq=17
 >Count</button>
 ```
 
-We can use this specification in one of two ways (or a combo of the two, as shown below):
 
 ## Example 3 - Tweaking with JavaScriptObjectNotation and/or attribute branches:
 
