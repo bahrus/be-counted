@@ -91,7 +91,7 @@ export interface EndUserProps {
 }
 ```
 
-We can use this specification in one of two ways (or a combo of the two, as shown below):
+We can use this specification in one of two ways (or a combo of the two, as shown below).  JavaScriptObjectNotation, and separated by attribute
 
 
 ```html
@@ -105,8 +105,20 @@ be-counted-lt-or-eq=17
 ```
 
 
-## Example 3 - Tweaking with JavaScriptObjectNotation and/or attribute branches:
+## Using a shorter name
 
+This package provides an alternative name for the rather long "be-counted", that could mae it less painful especially from layout the settings with individual attributes as opposed to JSON, especially in less formal settings, where conflicts with other libraries can be easily managed:
+
+
+```html
+<span></span>
+<button disabled 🔢='
+    {"nudge": true, "min": 3, "loop": true}
+    and share value with span
+'
+🔢-lt-or-eq=17
+>Count</button>
+```
 
 
 ## Use case:  disable on click
