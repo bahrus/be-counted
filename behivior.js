@@ -4,6 +4,13 @@ import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
 /** @import {Actions, PAP,  AP} from './ts-refs/be-counted/types' */;
 /** @import {CSSQuery} from './ts-refs/trans-render/types.js' */
 
+const andShareValue = String.raw `^(a|A)nd share value with (?<recipients>.*)`;
+
+/**
+ * @type {Array<[string, string]>}
+ */
+const dssArrayKeys = [['recipients', 'remoteSpecifiers']];
+
 /**
  * @type {Partial<EMC<any, AP>>}
  */
@@ -14,7 +21,15 @@ export const emc = {
         '0.0': {
             instanceOf: 'Object$entences',
             objValMapsTo: '.',
-            regExpExts:{}
+            regExpExts:{
+                parsedStatements: [
+                    {
+                        regExp: andShareValue,
+                        defaultVals:{},
+                        dssArrayKeys
+                    }
+                ]
+            }
         }
     },
     enhPropKey: 'beCounted',

@@ -20,7 +20,8 @@ class BeCounted extends BE {
             incOn: 'click'
         },
         propInfo:{
-            value: {}
+            value: {},
+            parsedStatements: {},
         },
         actions:{
             hydrate: {
@@ -37,7 +38,8 @@ class BeCounted extends BE {
      * @param {BAP} self 
      */
     async hydrate(self){
-        const {enhancedElement, min, incOn} = self;
+        const {enhancedElement, min, incOn, parsedStatements} = self;
+        console.log({parsedStatements});
         enhancedElement.addEventListener(incOn, this);
         return /** @type {PAP} */({
             value: min,
