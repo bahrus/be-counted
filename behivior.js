@@ -4,7 +4,7 @@ import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
 /** @import {Actions, PAP,  AP} from './ts-refs/be-counted/types' */;
 /** @import {CSSQuery} from './ts-refs/trans-render/types.js' */
 
-const andShareValue = String.raw `^(a|A)nd share value with (?<recipients>.*)`;
+const andShareValue = String.raw `^(a|A)nd share (?<localProp>.*) with (?<recipients>.*)`;
 
 /**
  * @type {Array<[string, string]>}

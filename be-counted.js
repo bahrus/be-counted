@@ -17,7 +17,8 @@ class BeCounted extends BE {
         propDefaults:{
             min: 0,
             step: 1,
-            incOn: 'click'
+            incOn: 'click',
+            isMaxedOut: false,
         },
         propInfo:{
             value: {},
@@ -40,6 +41,21 @@ class BeCounted extends BE {
     async hydrate(self){
         const {enhancedElement, min, incOn, parsedStatements} = self;
         console.log({parsedStatements});
+        if(parsedStatements !== undefined){
+            const {find} = await import('trans-render/dss/find.js');
+            const {ASMR} = await import('trans-render/asmr/asmr.js');
+            const {ASMRHandler} = await import('./ASMRHandler.js');
+            for(const parsedStatement of parsedStatements){
+                const {remoteSpecifiers, localProp} = parsedStatement;
+                for(const remoteSpecifier of remoteSpecifiers){
+                    const remoteEl = await find(enhancedElement, remoteSpecifier);
+                    if(remoteEl === null) throw 404;
+                    const so = await ASMR.getSO(remoteEl);
+                    new ASMRHandler(self, localProp, so);
+                }
+
+            }
+        }
         enhancedElement.addEventListener(incOn, this);
         return /** @type {PAP} */({
             value: min,
