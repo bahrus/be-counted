@@ -19,6 +19,10 @@ export const emc = {
     },
     enhPropKey: 'beCounted',
     importEnh: async () => {
-        const {} = await import('./')
+        const {BeCounted} = await import('./be-counted.js');
+        return BeCounted;
     }
 };
+
+const mose = seed(emc);
+MountObserver.synthesize(document, BeHive, mose);

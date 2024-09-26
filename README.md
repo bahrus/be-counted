@@ -1,4 +1,4 @@
-# be-counted (🔢) [TODO]
+# be-counted (🔢) [WIP]
 
 *be-counted* enables an HTML button (for example) to keep track of how many times it has been clicked.  
 
@@ -12,7 +12,7 @@ Or in twitterese - it provides a primitive signal on an island of interactivity,
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
 
 
-## Example 1 Counting silently [TODO]
+## Example 1 Counting silently 
 
 ```html
 <button id=oButton be-counted>Count</button>
@@ -41,7 +41,7 @@ beCounted.addEventListener('value', e => {
 
 To  alleviate that pain, be-counted has some built in mechanisms for sharing the value
 
-## Example 2 Sharing the value
+## Example 2 Sharing the value [TODO]
 
 ```html
 <span></span>
@@ -50,7 +50,7 @@ To  alleviate that pain, be-counted has some built in mechanisms for sharing the
 
 Specifying the places to share the value with is done via [DSSArray notation](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)).
 
-## Full specification
+## Full specification [TODO]
 
 The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this enhancement is shown below:
 
@@ -105,7 +105,7 @@ be-counted-lt-or-eq=17
 ```
 
 
-## Using a shorter name
+## Using a shorter name [TODO]
 
 This package provides an alternative name for the rather long "be-counted", that could mae it less painful especially from layout the settings with individual attributes as opposed to JSON, especially in less formal settings, where conflicts with other libraries can be easily managed:
 
@@ -121,7 +121,7 @@ This package provides an alternative name for the rather long "be-counted", that
 ```
 
 
-## Use case:  disable on click
+## Use case:  disable on click [TODO]
 
 One important use case for *be-counted* -- disabling a button once it's been clicked:
 

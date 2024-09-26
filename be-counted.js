@@ -7,7 +7,7 @@ import { propInfo, resolved, rejected } from 'be-enhanced/cc.js';
 
 /**
  * @implements {Actions}
- * 
+ * @implements {EventListenerObject}
  */
 class BeCounted extends BE {
     /**
@@ -15,15 +15,17 @@ class BeCounted extends BE {
      */
     static config = {
         propDefaults:{
-            isParsed: true,
             min: 0,
-            step: 1
+            step: 1,
+            incOn: 'click'
         },
         propInfo:{
-
+            value: {}
         },
         actions:{
-
+            hydrate: {
+                ifAllOf: ['step', 'incOn']
+            }
         },
         positractions: [
             resolved, rejected
@@ -35,7 +37,18 @@ class BeCounted extends BE {
      * @param {BAP} self 
      */
     async hydrate(self){
+        const {enhancedElement, min, incOn} = self;
+        enhancedElement.addEventListener(incOn, this);
+        return /** @type {PAP} */({
+            value: min,
+            resolved: true
+        })
+    }
 
+    handleEvent(){
+        const self = /** @type {BAP} */ (/** @type {any} */(this));
+        const {step} = self;
+        self.value += step;
     }
 }
 
