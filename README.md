@@ -91,14 +91,15 @@ export interface EndUserProps {
 }
 ```
 
-We can use this specification in one of two ways (or a combo of the two, as shown below).  JavaScriptObjectNotation, and separated by attribute
+We can use this specification in one of two ways (or a combo of the two, as shown below).  JavaScriptObjectNotation, and/or attribute-based configuration
 
+## Example 3 Mixed Approach
 
 ```html
 <span></span>
 <button disabled be-counted='
     {"nudge": true, "min": 3, "loop": true}
-    and share value with span
+    and share value with ^{(*)}
 '
 be-counted-lt-or-eq=17
 >Count</button>

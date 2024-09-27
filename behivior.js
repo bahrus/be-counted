@@ -30,7 +30,16 @@ export const emc = {
                     }
                 ]
             }
+        },
+        '1.0': {
+            instanceOf: 'Number',
+            mapsTo: 'step'
+        },
+        '2.0': {
+            instanceOf: 'Number',
+            mapsTo: 'ltOrEq'
         }
+
     },
     enhPropKey: 'beCounted',
     importEnh: async () => {

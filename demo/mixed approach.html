@@ -17,9 +17,14 @@
     </script>
 </head>
 <body>
-    <div>
-        <span itemprop=count></span>
-        <button be-counted="and share value with ^{(*)}.">Count</button>
+    <div itemscope id=test>
+        <span></span>
+        <button disabled be-counted='
+            {"nudge": true, "min": 3, "loop": true}
+            and share value with ^{(*)}
+        '
+        be-counted-lt-or-eq=17
+        >Count</button>
     </div>
 
 
