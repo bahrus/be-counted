@@ -27,6 +27,10 @@ export class ASMRHandler{
     }
 
     handleEvent(){
-        this.#so.setValue(this.#self[this.#prop]);
+        const val = this.#self[this.#prop];
+        if(val !== undefined){
+            this.#so.setValue(val);
+        }
+        
     }
 }
