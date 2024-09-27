@@ -18,13 +18,18 @@ class BeCounted extends BE {
             min: 0,
             step: 1,
             incOn: 'click',
-            isMaxedOut: false,
         },
         propInfo:{
             count: {},
             value: {},
             parsedStatements: {},
-            nudge: {}
+            nudge: {},
+            lt: {},
+            ltOrEq: {},
+            isMaxedOut: {
+                ro: true,
+                def: false
+            }
         },
         compacts:{
             when_count_changes_invoke_onCount: 0,
@@ -106,6 +111,10 @@ class BeCounted extends BE {
                 return {
                     value: min
                 };
+            }else{
+                return {
+                    isMaxedOut
+                }
             }
         }
         return {
