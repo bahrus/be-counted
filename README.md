@@ -97,11 +97,10 @@ We can use this specification in one of two ways (or a combo of the two, as show
 
 ```html
 <span></span>
-<button disabled be-counted='
-    {"nudge": true, "min": 3, "loop": true}
-    and share value with ^{(*)}
-'
-be-counted-lt-or-eq=17
+<button disabled 
+    be-counted="and share value with ^{(*)}"
+    be-counted-config='{"nudge": true, "min": 3, "loop": true}'
+    be-counted-lt-or-eq=17
 >Count</button>
 ```
 
