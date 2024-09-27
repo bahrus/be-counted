@@ -36,7 +36,8 @@ class BeCounted extends BE {
                 ro: true,
                 def: false
             },
-            disableOnMax: {}
+            disableOnMax: {},
+            once: {},
         },
         compacts:{
             when_count_changes_invoke_onCount: 0,
@@ -44,6 +45,9 @@ class BeCounted extends BE {
         actions:{
             hydrate: {
                 ifAllOf: ['step', 'incOn']
+            },
+            onOnce:{
+                ifAllOf: ['once']
             }
         },
         positractions: [
@@ -127,10 +131,23 @@ class BeCounted extends BE {
                 }
             }
         }
-        return {
+        return /** @type {PAP} */({
             value: newVal,
             isMaxedOut
-        }
+        })
+    }
+
+    /**
+     * 
+     * @param {BAP} self 
+     */
+    onOnce(self){
+        return /** @type {PAP} */({
+            lt: 1,
+            min: 0,
+            step: 1,
+            disableOnMax: true
+        });
     }
 }
 

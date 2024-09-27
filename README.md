@@ -1,4 +1,4 @@
-# be-counted (🔢) [WIP]
+# be-counted (🔢)
 
 *be-counted* enables an HTML button (for example) to keep track of how many times it has been clicked.  
 
@@ -83,6 +83,11 @@ export interface EndUserProps {
      * Event name to trigger count increment
      */
     incOn?: string;
+    /**
+     * Disable on max
+     */
+    disableOnMax?: boolean;
+
     
 }
 ```
@@ -118,22 +123,19 @@ This package provides an alternative name for the rather long "be-counted", that
 Notice how much mental firepower it requires to [define a name to your liking](https://github.com/bahrus/be-counted/blob/baseline/%F0%9F%94%A2.js).
 
 
-## Use case:  disable on click [TODO]
+## Use case:  disable on click
 
 One important use case for *be-counted* -- disabling a button once it's been clicked:
 
-## JavaScriptObjectNotation
-
 ```html
 <span></span>
-<button be-counted='{
-    "lt": 2,
-    "transform": {
-        "span": "value"
-    },
-    
-}'>Count</button>
+<button disabled 
+    🔢="and share value with ^{(*)}"
+    🔢-once
+>Count</button>
 ```
+
+
 
 
 
