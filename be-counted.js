@@ -21,8 +21,13 @@ class BeCounted extends BE {
             isMaxedOut: false,
         },
         propInfo:{
+            count: {},
             value: {},
             parsedStatements: {},
+            nudge: {}
+        },
+        compacts:{
+            when_count_changes_invoke_onCount: 0,
         },
         actions:{
             hydrate: {
@@ -39,7 +44,7 @@ class BeCounted extends BE {
      * @param {BAP} self 
      */
     async hydrate(self){
-        const {enhancedElement, min, incOn, parsedStatements} = self;
+        const {enhancedElement, min, incOn, parsedStatements, nudge} = self;
         console.log({parsedStatements});
         if(parsedStatements !== undefined){
             const {find} = await import('trans-render/dss/find.js');
@@ -57,16 +62,56 @@ class BeCounted extends BE {
             }
         }
         enhancedElement.addEventListener(incOn, this);
+        if(nudge){
+            const {nudge} = await import('trans-render/lib/nudge.js');
+            nudge(enhancedElement);
+        }
         return /** @type {PAP} */({
-            value: min,
+            count: min,
             resolved: true
         })
     }
 
     handleEvent(){
         const self = /** @type {BAP} */ (/** @type {any} */(this));
-        const {step} = self;
-        self.value += step;
+        //const {step} = self;
+        self.count += 1;
+    }
+
+    /**
+     * 
+     * @param {BAP} self 
+     */
+    onCount(self){
+        const {step, lt, ltOrEq, value, min} = self;
+        if(value === undefined){
+            return {
+                value: min
+            };
+        }
+        const newVal = value + step;
+        let isMaxedOut = false;
+        if(lt !== undefined){
+            if(newVal >= lt){
+                isMaxedOut = true;
+            }
+        }else if(ltOrEq !== undefined){
+            if(newVal > ltOrEq){
+                isMaxedOut = true;
+            }
+        }
+        if(isMaxedOut){
+            const {loop} = self;
+            if(loop){
+                return {
+                    value: min
+                };
+            }
+        }
+        return {
+            value: newVal,
+            isMaxedOut
+        }
     }
 }
 
