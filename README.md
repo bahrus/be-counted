@@ -41,11 +41,11 @@ beCounted.addEventListener('value', e => {
 
 To  alleviate that pain, be-counted has some built in mechanisms for sharing the value
 
-## Example 2 Sharing the value [TODO]
+## Example 2 Sharing the value
 
 ```html
 <span></span>
-<button be-counted="and share value with span">Count</button>
+<button be-counted="and share value with ^{(*)}">Count</button>
 ```
 
 Specifying the places to share the value with is done via [DSSArray notation](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)).
