@@ -20,8 +20,12 @@ class BeCounted extends BE {
             incOn: 'click',
         },
         propInfo:{
-            count: {},
-            value: {},
+            count: {
+                //ro: true
+            },
+            value: {
+                ro: true
+            },
             parsedStatements: {},
             nudge: {},
             lt: {},
