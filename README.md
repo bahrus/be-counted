@@ -105,20 +105,21 @@ We can use this specification in one of two ways (or a combo of the two, as show
 ```
 
 
-## Using a shorter name [TODO]
+## Using a shorter name
 
 This package provides an alternative name for the rather long "be-counted", that could mae it less painful especially from layout the settings with individual attributes as opposed to JSON, especially in less formal settings, where conflicts with other libraries can be easily managed:
 
 
 ```html
 <span></span>
-<button disabled 🔢='
-    {"nudge": true, "min": 3, "loop": true}
-    and share value with span
-'
-🔢-lt-or-eq=17
+<button disabled 
+    🔢="and share value with ^{(*)}"
+    🔢-config='{"nudge": true, "min": 3, "loop": true}'
+    🔢-lt-or-eq=17
 >Count</button>
 ```
+
+Notice how much mental firepower it requires to [define a name to your liking](https://github.com/bahrus/be-counted/blob/baseline/%F0%9F%94%A2.js).
 
 
 ## Use case:  disable on click [TODO]
