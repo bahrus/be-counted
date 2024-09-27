@@ -87,7 +87,13 @@ export interface EndUserProps {
      * Disable on max
      */
     disableOnMax?: boolean;
-
+    /**
+     * set lt = 1
+     * and min = 0
+     * and step = 1
+     * and disableOnMax = true
+     */
+    once?: boolean
     
 }
 ```
