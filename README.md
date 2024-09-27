@@ -83,10 +83,6 @@ export interface EndUserProps {
      * Event name to trigger count increment
      */
     incOn?: string;
-    /**
-     * Property to subscribe to trigger count increment
-     */
-    incOnSet?: string;
     
 }
 ```

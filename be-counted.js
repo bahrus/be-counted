@@ -26,14 +26,17 @@ class BeCounted extends BE {
             value: {
                 ro: true
             },
-            parsedStatements: {},
+            parsedStatements: {
+                ro: true,
+            },
             nudge: {},
             lt: {},
             ltOrEq: {},
             isMaxedOut: {
                 ro: true,
                 def: false
-            }
+            },
+            disableOnMax: {}
         },
         compacts:{
             when_count_changes_invoke_onCount: 0,
@@ -110,12 +113,15 @@ class BeCounted extends BE {
             }
         }
         if(isMaxedOut){
-            const {loop} = self;
+            const {loop, disableOnMax, enhancedElement} = self;
             if(loop){
                 return {
                     value: min
                 };
             }else{
+                if(disableOnMax && 'disabled' in enhancedElement){
+                    enhancedElement.disabled = true;
+                }
                 return {
                     isMaxedOut
                 }
