@@ -21,6 +21,7 @@ class BeCounted extends BE {
             incOn: 'click',
         },
         propInfo:{
+            ...propInfo,
             count: {
                 //ro: true
             },
