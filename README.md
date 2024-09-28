@@ -78,7 +78,7 @@ export interface EndUserProps {
     /**
      * Slowly "awaken" a disabled element.  If the disabled attribute is not set to a number, or is set to "1", removes the disabled attribute.  If it is a larger number, decrements the number by 1. 
      */
-    nudge?: boolean;
+    nudges?: boolean;
     /**
      * Event name to trigger count increment
      */
@@ -106,7 +106,7 @@ We can use this specification in one of two ways (or a combo of the two, as show
 <span></span>
 <button disabled 
     be-counted="and share value with ^{(*)}"
-    be-counted-config='{"nudge": true, "min": 3, "loop": true}'
+    be-counted-config='{"nudges": true, "min": 3, "loop": true}'
     be-counted-lt-or-eq=17
 >Count</button>
 ```
@@ -121,7 +121,7 @@ This package provides an alternative name for the rather long "be-counted", that
 <span></span>
 <button disabled 
     🔢="and share value with ^{(*)}"
-    🔢-config='{"nudge": true, "min": 3, "loop": true}'
+    🔢-config='{"nudges": true, "min": 3, "loop": true}'
     🔢-lt-or-eq=17
 >Count</button>
 ```
