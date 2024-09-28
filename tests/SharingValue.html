@@ -5,42 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
-    <span></span>
-    <button id=button be-counted='{
-        "transform": {
-            "span": "value",
-            "button": "value"
-        }
-    }'>Count</button>
-    <div id=target></div>
     <script type=importmap>
         {
             "imports": {
-                "be-enhanced/": "../node_modules/be-enhanced/",
-                "be-hive/": "../node_modules/be-hive/",
-                "mount-observer/": "../node_modules/mount-observer/",
-                "trans-render/": "../node_modules/trans-render/",
-                "xtal-element/": "../node_modules/xtal-element/"
+                "be-enhanced/": "/node_modules/be-enhanced/",
+                "be-hive/": "/node_modules/be-hive/",
+                "mount-observer/": "/node_modules/mount-observer/",
+                "trans-render/": "/node_modules/trans-render/"
             }
         }
     </script>
+</head>
+<body>
+    <span id=span></span>
+    <button id=button be-counted="and share value with ^{(*)}.">Count</button>
+
+    <div id=target></div>
+
     <script type=module>
-        import '../behivior.js';
+        import '/behivior.js';
     </script>
     <script>
         function runTest(){
             button.click();
             setTimeout(() => {
-                if(button.textContent === '1'){
+                if(span.textContent === '1'){
                     target.setAttribute('mark', 'good');
                 }
             }, 100);
         }
         setTimeout(() => {
             runTest();
-        }, 2000);
+        }, 500);
     </script>
 </body>
 </html>
