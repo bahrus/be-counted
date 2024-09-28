@@ -148,7 +148,6 @@ class BeCounted extends BE {
             min: 0,
             step: 1,
             disableOnMax: true,
-            nudges: true,
         });
     }
 }
