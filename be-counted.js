@@ -4,6 +4,7 @@ import { propInfo, resolved, rejected } from 'be-enhanced/cc.js';
 
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
 /** @import {Actions, PAP, AP, BAP, ObservingParameters} from './ts-refs/be-counted/types' */
+/** @import {SetOptions} from './ts-refs/trans-render/asmr/types' */
 
 /**
  * @implements {Actions}
@@ -71,7 +72,9 @@ class BeCounted extends BE {
                 for(const remoteSpecifier of remoteSpecifiers){
                     const remoteEl = await find(enhancedElement, remoteSpecifier);
                     if(remoteEl === null) throw 404;
-                    const so = await ASMR.getSO(remoteEl);
+                    const so = await ASMR.getSO(remoteEl, {
+                        
+                    });
                     new ASMRHandler(self, localProp, so);
                 }
 
