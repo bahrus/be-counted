@@ -61,7 +61,7 @@ export const emc = {
         },
         '8.0': {
             instanceOf: 'Boolean',
-            mapsTo: 'nudge'
+            mapsTo: 'nudges'
         },
         '9.0': {
             instanceOf: 'String',

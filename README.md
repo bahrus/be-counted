@@ -144,7 +144,7 @@ One important use case for *be-counted* -- disabling a button once it's been cli
 ## Example 6 - share to property of adorned element
 
 ```html
-<button disabled 
+<button 
     🔢="and share value with $0:dataset:count."
 >Count</button>
 ```

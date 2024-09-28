@@ -30,7 +30,7 @@ class BeCounted extends BE {
             parsedStatements: {
                 ro: true,
             },
-            nudge: {},
+            nudges: {},
             lt: {},
             ltOrEq: {},
             isMaxedOut: {
@@ -61,8 +61,7 @@ class BeCounted extends BE {
      * @param {BAP} self 
      */
     async hydrate(self){
-        const {enhancedElement, min, incOn, parsedStatements, nudge} = self;
-        console.log({parsedStatements});
+        const {enhancedElement, min, incOn, parsedStatements, nudges} = self;
         if(parsedStatements !== undefined){
             const {find} = await import('trans-render/dss/find.js');
             const {ASMR} = await import('trans-render/asmr/asmr.js');
@@ -81,9 +80,8 @@ class BeCounted extends BE {
             }
         }
         enhancedElement.addEventListener(incOn, this);
-        if(nudge){
-            const {nudge} = await import('trans-render/lib/nudge.js');
-            nudge(enhancedElement);
+        if(nudges){
+            await self.nudge();
         }
         return /** @type {PAP} */({
             count: min,
@@ -149,7 +147,8 @@ class BeCounted extends BE {
             lt: 1,
             min: 0,
             step: 1,
-            disableOnMax: true
+            disableOnMax: true,
+            nudges: true,
         });
     }
 }
