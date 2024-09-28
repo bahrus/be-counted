@@ -12,7 +12,7 @@ Or in twitterese - it provides a primitive signal on an island of interactivity,
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-counted?compression=gzip">
 
 
-## Example 1 Counting silently 
+## Example 1 - Counting silently 
 
 ```html
 <button id=oButton be-counted>Count</button>
@@ -41,7 +41,7 @@ beCounted.addEventListener('value', e => {
 
 To  alleviate that pain, be-counted has some built in mechanisms for sharing the value
 
-## Example 2 Sharing the value
+## Example 2 - Sharing the value
 
 ```html
 <span></span>
@@ -50,7 +50,7 @@ To  alleviate that pain, be-counted has some built in mechanisms for sharing the
 
 Specifying the places to share the value with is done via [DSSArray notation](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)).
 
-## Full specification [TODO]
+## Full specification
 
 The full [specification](https://github.com/bahrus/be-counted/blob/baseline/types.d.ts) for this enhancement is shown below:
 
@@ -100,7 +100,7 @@ export interface EndUserProps {
 
 We can use this specification in one of two ways (or a combo of the two, as shown below).  JavaScriptObjectNotation, and/or attribute-based configuration
 
-## Example 3 Mixed Approach
+## Example 3 - Mixed Approach
 
 ```html
 <span></span>
@@ -112,7 +112,7 @@ We can use this specification in one of two ways (or a combo of the two, as show
 ```
 
 
-## Using a shorter name
+## Example 4 - Using a shorter name
 
 This package provides an alternative name for the rather long "be-counted", that could mae it less painful especially from layout the settings with individual attributes as opposed to JSON, especially in less formal settings, where conflicts with other libraries can be easily managed:
 
@@ -129,7 +129,7 @@ This package provides an alternative name for the rather long "be-counted", that
 Notice how much mental firepower it requires to [define a name to your liking](https://github.com/bahrus/be-counted/blob/baseline/%F0%9F%94%A2.js).
 
 
-## Use case:  disable on click
+## Example 5 -  disable on click
 
 One important use case for *be-counted* -- disabling a button once it's been clicked:
 
@@ -141,9 +141,13 @@ One important use case for *be-counted* -- disabling a button once it's been cli
 >Count</button>
 ```
 
+## Example 6 - share to property of adorned element
 
-
-
+```html
+<button disabled 
+    🔢="and share value with $0:dataset:count."
+>Count</button>
+```
 
 ## Running locally
 
