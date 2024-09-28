@@ -73,7 +73,7 @@ class BeCounted extends BE {
                     const remoteEl = await find(enhancedElement, remoteSpecifier);
                     if(remoteEl === null) throw 404;
                     const so = await ASMR.getSO(remoteEl, {
-                        
+                        path: remoteSpecifier.path
                     });
                     new ASMRHandler(self, localProp, so);
                 }
