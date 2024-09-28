@@ -114,7 +114,7 @@ We can use this specification in one of two ways (or a combo of the two, as show
 
 ## Example 4 - Using a shorter name
 
-This package provides an alternative name for the rather long "be-counted", that could mae it less painful especially from layout the settings with individual attributes as opposed to JSON, especially in less formal settings, where conflicts with other libraries can be easily managed:
+This package provides an alternative name for the rather long "be-counted", that could make it less painful to configure, especially if laying out the settings with individual attributes as opposed to JSON, especially in less formal settings, where conflicts with other libraries can be easily managed:
 
 
 ```html
