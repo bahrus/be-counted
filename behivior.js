@@ -16,7 +16,7 @@ const dssArrayKeys = [['recipients', 'remoteSpecifiers']];
  */
 export const emc = {
     base: 'be-counted',
-    branches: ['', 'config', 'step', 'lt-or-eq', 'once', 'lt', 'min', 'loop', 'nudge', 'incOn', 'incOnSet'],
+    branches: ['', 'config', 'step', 'lt-or-eq', 'once', 'lt', 'min', 'loop', 'nudge', 'inc-on'],
     map: {
         '0.0': {
             instanceOf: 'Object$entences',
@@ -46,6 +46,26 @@ export const emc = {
         '4.0': {
             instanceOf: 'Boolean',
             mapsTo: 'once'
+        },
+        '5.0': {
+            instanceOf: 'Number',
+            mapsTo: 'lt'
+        },
+        '6.0':{
+            instanceOf: 'Number',
+            mapsTo: 'min'
+        },
+        '7.0': {
+            instanceOf: 'Boolean',
+            mapsTo: 'loop'
+        },
+        '8.0': {
+            instanceOf: 'Boolean',
+            mapsTo: 'nudge'
+        },
+        '9.0': {
+            instanceOf: 'String',
+            mapsTo: 'incOn'
         }
 
     },
