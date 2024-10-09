@@ -31,7 +31,7 @@ oButton.beEnhanced.beCounted.addEventListener('value', e => {
 "More or less" refers to needing to wait for the enhancement to load, which is a bit of a pain:
 
 ```JavaScript
-await import('be-counted/behivior.js');
+await import('be-counted/emc.js');
 const beCounted = oButton.beEnhanced.whenResolved('be-counted');
 console.log({value: beCounted.value});
 beCounted.addEventListener('value', e => {
